@@ -1,0 +1,491 @@
+<?php
+
+namespace App\Http\Controllers\Back;
+
+use App\Http\Controllers\Controller;
+use App\Models\Asset;
+use App\Models\Content;
+use App\Models\Informasi;
+use App\Models\Section;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response as res;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Protection;
+
+class CoursesController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view('back.courses.index');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $data['model'] = new Content();
+        $section = Section::where('slug',request()->segment(2))->first();
+        $data['program'] = Content::where('section_id','=',$section->parent_section_id)->where('active',1)->get();
+        $data['informasi'] = Informasi::all();
+        return view('back.courses.form', $data);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        // $request->validate([
+        //     'title' => 'required',
+        //     'gambar.*'      => 'required|mimes:jpeg,bmp,png,gif,svg,pdf,jpg|max:20480',
+        //     'active' => 'required',
+        // ],
+        // [
+        //     'title.required' => 'Judul Artikel Wajib Diisi',
+        //     'gambar.required' => 'File Gambar Wajib Dilampirkan',
+        //     'active.required' => 'Keterangan Wajib Diisi'
+        // ]);
+
+        dd($request->all());
+
+
+        // for($i=0; $i < count($request->sub_time_id); $i++) {
+        //     $index = explode('-', $request->sub_time_id[$i]);
+
+        //     echo $index[0].' - '.$index[1].'<br>';
+        // }
+
+        // $content = $request->content;
+        // if(isset($content)) {
+        //     $dom = new \DomDocument();
+        //     $dom->loadHtml($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        //     $imageFile = $dom->getElementsByTagName('imageFile');
+        
+        //     foreach($imageFile as $item => $image){
+        //         $data = $content->getAttribute('src');
+        //         list($type, $data) = explode(';', $data);
+        //         list(, $data)      = explode(',', $data);
+        //         $imgeData = base64_decode($data);
+        //         $image_name= "/upload/" . time().$item.'.png';
+        //         $path = public_path() . $image_name;
+        //         file_put_contents($path, $imgeData);
+                
+        //         $image->removeAttribute('src');
+        //         $image->setAttribute('src', $image_name);
+        //     }
+        //     $content = $dom->saveHTML();
+        // }
+        // $konten= [];
+
+        $konten_title = $request->konten_title;
+        $sub_time_konten = $request->sub_time_id;
+        // $unique_data = array_values(array_unique($konten_title));
+        
+        // $jumlah_entry = count($unique_data);
+        // Inisialisasi array untuk menyimpan data sub_konten
+        // $sub_konten_array = [];
+
+        // // Inisialisasi array untuk menyimpan data sub_konten pada konten tertentu
+        // $sub_konten_data = [];
+
+        
+        // foreach ($request->konten_title as $key => $value) {
+           
+        //             for ($j = 0; $j < count($sub_time_konten); $j++) {
+
+        //                 // if($index[0] == $unique_data[$j]) {
+        //                     // Data sub_konten
+        //                     $sub_konten_data[] = [
+        //                         "sub_konten_title" => $request->sub_konten_title[$j],
+        //                         "sub_konten_image" => $request->sub_konten_image[$j],
+        //                         "sub_konten_description" => $request->sub_konten_description[$j]
+        //                     ];
+        //                 // }
+        //             }
+        //             $konten = ["konten_title"=>$value,
+        //                 "konten_description" => $sub_konten_data
+        //             ];
+
+                    
+        //         }
+        //         json_encode($konten);
+
+
+
+        // Inisialisasi array untuk menyimpan data sub_konten
+        $sub_konten_array = [];
+
+        // Loop untuk setiap konten
+        // for ($i = 0; $i < $jumlah_entry; $i++) {
+        //     // Inisialisasi array untuk menyimpan data sub_konten pada konten tertentu
+        //     $sub_konten_data = [];
+
+        //     // Loop untuk setiap sub_konten pada konten tertentu
+        //     for ($j = 0; $j < count($sub_time_konten); $j++) {
+        //         // Data sub_konten
+                
+        //         $sub_konten_data[] = [
+        //             "sub_konten_title" => $request->sub_konten_title[$j],
+        //             "sub_konten_image" => $request->sub_konten_image[$j],
+        //             "sub_konten_description" => $request->sub_konten_description[$j]
+        //         ];
+        //     }
+
+        //     // Data konten
+        //     $konten_data = [
+        //         "konten_title" => $unique_data[$i],
+        //         "konten_description" => $sub_konten_data
+        //     ];
+
+        for ($i=0; $i < count($request->konten_title_id); $i++) { 
+
+            $index = $request->id[$i];
+            echo $index."<br>";
+            for ($j=0; $j < count($request->sub_konten_index[$index]); $j++) { 
+                          $sub_konten_data[] = [
+                    "sub_konten_title" => $request->sub_konten_title[$index][$j],
+                    "sub_konten_image" => $request->sub_konten_image[$index][$j],
+                    "sub_konten_description" => $request->sub_konten_description[$index][$j]
+                ];
+            }
+
+
+               $konten_data = [
+                "konten_title" => $request->konten_title_id[$i],
+                "konten_description" => $sub_konten_data
+            ];
+            // Tambahkan data konten ke array sub_konten_array
+            $sub_konten_array[] = $konten_data;
+        }
+
+
+
+        // Kumpulkan data sub_konten ke dalam array
+        $data_array = [
+            "sub_konten" => $sub_konten_array
+        ];
+
+        // Encode array ke format JSON
+        $json_output = json_encode($data_array, JSON_PRETTY_PRINT);
+
+        // Output JSON
+        echo $json_output;
+
+        // Loop untuk setiap sub_konten pada konten tertentu
+
+        // dd($konten);
+
+        // Data konten
+        // $konten_data = [
+        //     "konten_title" => $unique_data[$j],
+        //     "konten_description" => $sub_konten_data
+        // ];
+
+        // // Tambahkan data konten ke array sub_konten_array
+        // $sub_konten_array[] = $konten_data;
+
+        // // Kumpulkan data sub_konten ke dalam array
+        // $data_array = [
+        //     "sub_konten" => $sub_konten_array
+        // ];
+
+        // // Encode array ke format JSON
+        // $json_output = json_encode($data_array, JSON_PRETTY_PRINT);
+
+        // // Output JSON
+        // echo $json_output;
+
+
+
+
+
+        // $section = Section::where('slug',request()->segment(2))->first();
+        
+        // $model = new Content();
+
+        // $model->title = $request->title;
+        // $model->subtitle = $request->subtitle;
+        // $model->slug = $this->textToSlug($request->title);
+        // $model->short_description = $request->short_description;
+        // $model->content = $content;
+        // $model->section_id = $section->id;
+        // $model->parent_content_id = $request->program;
+        // $model->active = $request->active;
+        // $model->save();
+
+        // if($request->file('gambar')) {
+        //     foreach($request->file('gambar') as $key => $file) {
+        //         $time = time();
+        //         $fileName = $time.'-'.Auth::user()->id.'-course-'.$file->hashName();
+        //         $file->move(public_path('front/assets/img'), $fileName);
+
+        //         $asset = new Asset();
+        //         $asset->thumbnail = $fileName;
+        //         $asset->content_id = $model->id;
+        //         $asset->keterangan = $request->keterangan[$key];
+        //         $asset->save();
+        //     }
+        // }
+
+        // if ($model->save()) {
+        //     return redirect()->route('administrator.courses.index')->with('alert.success', 'Courses telah berhasil Disimpan');
+        // } else {
+        //     return redirect()->route('administrator.courses.create')->with('alert.failed', 'Something Wrong');
+        // }
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $model = Content::find($id);
+        return res::json($model);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $id = base64_decode($id);
+        $data['model'] = Content::find($id);
+        $data['program'] = Content::where('section_id','=',3)->where('active',1)->get();
+        $data['informasi'] = Informasi::all();
+        
+        return view('back.courses.form', $data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+        ],
+        [
+            'title' => 'Judul Artikel Wajib Diisi',
+            'content' => 'Konten Artikel Wajib Diisi',
+        ]);
+
+        $content = $request->content;
+        $dom = new \DomDocument();
+        $dom->loadHtml($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $imageFile = $dom->getElementsByTagName('imageFile');
+    
+        foreach($imageFile as $item => $image){
+            $data = $content->getAttribute('src');
+            list($type, $data) = explode(';', $data);
+            list(, $data)      = explode(',', $data);
+            $imgeData = base64_decode($data);
+            $image_name= "/upload/" . time().$item.'.png';
+            $path = public_path() . $image_name;
+            file_put_contents($path, $imgeData);
+            
+            $image->removeAttribute('src');
+            $image->setAttribute('src', $image_name);
+            }
+        
+        $content = $dom->saveHTML();
+
+        $section = Section::where('slug',request()->segment(2))->first();
+
+        $id = base64_decode($id);
+        $model = Content::find($id);
+
+        $model->title = $request->title;
+        $model->subtitle = $request->subtitle;
+        $model->slug = $this->textToSlug($request->title);
+        $model->short_description = $request->short_description;
+        $model->content = $content;
+        $model->section_id = $section->id;
+        $model->parent_content_id = $request->program;
+        $model->active = $request->active;
+        $model->save();
+
+        
+        if($request->file('gambar')) {
+            foreach($request->file('gambar') as $key => $file) {
+                $asset = Asset::where('content_id',$model->id)->where('keterangan',$request->keterangan[$key])->first();
+
+                if(file_exists(public_path('front/assets/img/'.$asset->thumbnail))) {
+                    unlink(public_path('front/assets/img/'.$asset->thumbnail));
+                }
+
+                $time = time();
+                $fileName =  $time.'-'.Auth::user()->id.'-course-'.$file->hashName();
+                $file->move(public_path('front/assets/img'), $fileName);
+
+                $asset_model = Asset::find($asset->id);
+                $asset_model->thumbnail = $fileName;
+                $asset_model->keterangan = $request->keterangan[$key];
+                $asset_model->save();
+            }
+
+            
+
+            // $time = time();
+            // $fileName = $time.'-'.Auth::user()->id.'-artikel.'.$request->image->extension();
+
+            // $request->image->move(public_path('front/assets/img'), $fileName);
+            // $model->thumbnail = $fileName;
+        }
+        
+        if ($model->save()) {
+            return redirect()->route('administrator.courses.index')->with('alert.success', 'Artikel Has Been Updated');
+        } else {
+            return redirect()->route('administrator.courses.create')->with('alert.failed', 'Something Wrong');
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $id = base64_decode($id);
+        $model = Content::find($id);
+        if(file_exists(public_path('front/assets/img/'.$model->thumbnail))) {
+            unlink(public_path('front/assets/img/'.$model->thumbnail));
+        }
+        $model->deleted_at = date('Y-m-d H:i:s');
+        $model->deleted_by = Auth::user()->id;
+        $model->save();
+    }
+
+    public function datatable(Request $request)
+    {
+        $section = Section::where('slug',request()->segment(2))->first();
+        $query = Content::leftJoin('contents as c','c.id','=','contents.parent_content_id')->where('contents.section_id','=',$section->id)
+        ->select('contents.id','contents.title','c.title as program','contents.active');
+        return DataTables::of($query)
+            ->addColumn('action', function ($model) {
+                $string = '<div class="btn-group">';
+                $string .= '<a href="' . route('administrator.courses.edit', ['id' => base64_encode($model->id)]) . '" type="button"  class="btn btn-sm btn-info" title="Edit Course"><i class="fas fa-edit"></i></a>';
+                $string .= '&nbsp;&nbsp;<a href="' . route('administrator.courses.destroy', ['id' => base64_encode($model->id)]) . '" type="button" class="btn btn-sm btn-danger btn-delete" title="Hapus Course"><i class="fa fa-trash"></i></a>';
+                $string .= '</div>';
+                return $string;
+            })
+            ->addIndexColumn()
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    private function textToSlug($text='') {
+        $text = trim($text);
+        if (empty($text)) return '';
+          $text = preg_replace("/[^a-zA-Z0-9\-\s]+/", "", $text);
+          $text = strtolower(trim($text));
+          $text = str_replace(' ', '-', $text);
+          $text = $text_ori = preg_replace('/\-{2,}/', '-', $text);
+          return $text;
+    }
+
+    function getCourse(Request $request)
+    {
+        $id = $request->id;
+        $data = Content::where('parent_section_id',$id)->get();
+        return res::json($data);
+    }
+
+    public function saveSubContent(Request $request)
+    {
+        $id = time();
+        $time_id = $request->time_id;
+        $sub_time_id = $request->sub_time_id;
+        $title_konten = $request->title_konten;
+        $title_sub_konten = $request->title_sub_konten;
+        $upload_image_sub_konten = $request->upload_image_sub_konten;
+        $short_description_sub_konten = $request->short_description_sub_konten;
+        $data['row'] = '';
+
+        // if ($id_mpr) {
+        //     $mpr = Mpr::find($id_mpr);
+
+        //     $mpr['basic_data'] = json_decode($mpr->basic_data, true);
+
+        //     foreach ($mpr['basic_data']['function_of_role'] as $f) {
+        //         $data['row'] .= '<tr id="' . $id . '">
+        //                     <td>
+        //                         <span>' . $f['title'] . '</span>
+        //                         <input type="hidden" name="FoR_index[]" value="' . time() . '">
+        //                         <input type="hidden" name="FoR_title[]" value="' . $f['title'] . '">
+        //                     </td>
+        //                     <td><span>' . $f['description'] . '</span><input type="hidden" name="FoR_description[]" value="' . $f['description'] . '"></td>
+        //                     <td><button type="button" class="btn btn-xs btn-danger" onClick="deleteFoR(this)"><i class="fas fa-trash"></i></button></td>
+        //         </tr>';
+        //     }
+        // } else {
+            // $validated = $request->validate([
+            //     'title_sub_konten' => 'required',
+            //     'short_description_sub_konten' => 'required',
+            //     'upload_image_sub_konten' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            // ], [
+            //     'title_sub_konten.required' => 'Judul Sub Konten wajib diisi',
+            //     'short_description_sub_konten.required' => 'Deskripsi Singkat Sub Konten wajib diisi',
+            //     'upload_image_sub_konten.max' => 'Ukuran Maksimal Gambar Sub Konten adalah 2 MB',
+            // ]);
+
+
+
+            if($request->hasFile('upload_image_sub_konten')) {
+                $time = time();
+                $fileName = $time.'-'.Auth::user()->id.'-subkonten.'.$request->upload_image_sub_konten->extension();
+                $request->upload_image_sub_konten->move(public_path('front/assets/img'), $fileName);
+            }
+            
+            $title = '<span>' . $title_sub_konten . '</span>';
+            $title .= '<input type="hidden" name="time_id[]" value="' . $time_id . '">';
+            $title .= '<input type="hidden" name="id[]" value="' . $time_id . '">';
+            $title .= '<input type="hidden" name="konten_title_id[]" value="' . $title_konten . '">';
+            $title .= '<input type="hidden" name="sub_konten_index['.$time_id.'][][]" value="' . time() . '">';
+            $title .= '<input type="hidden" name="sub_konten_title['.$time_id.'][]" value="' . $title_sub_konten . '">';
+            $image = '<img src="'.asset('front/assets/img/'.$fileName).'" width="150px" height="100px">';
+            $image .= '<input type="hidden" name="sub_konten_image['.$time_id.'][]" value="' . $fileName . '">';
+            $description = '<span>' . $short_description_sub_konten . '</span>';
+            $description .= '<input type="hidden" name="sub_konten_description['.$time_id.'][]" value="' . $short_description_sub_konten . '">';
+
+            $data['row'] .= '<tr id="' . $id . '">
+                            <td>' . $title_konten . '</td>
+                            <td>' . $title . '</td>
+                            <td>' . $image . '</td>
+                            <td>' . $description . '</td>
+                            <td><button type="button" class="btn btn-xs btn-danger" onClick="deleteFoR(this, '.$time_id.')"><i class="fas fa-trash"></i></button></td>
+                </tr>';
+
+
+        return response()->json($data);
+    }
+}
