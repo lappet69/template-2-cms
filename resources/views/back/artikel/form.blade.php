@@ -99,7 +99,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="gambar" class="col-sm-12 col-form-label">Foto<span class="text-red">*</span>
+                            <label for="gambar" class="col-sm-12 col-form-label">Gambar<span class="text-red">*</span>
                                 <a href="javascript:void(0)" class="btn btn-xs btn-inventory" id="tambahGambar"><i
                                         class="fas fa-plus"></i></a></label>
 
@@ -112,67 +112,26 @@
                                     $asset = \App\Models\Asset::where('content_id', $model->id)->get();
                                 @endphp
 
-                                @foreach ($asset as $a)
-                                    <div>
-                                        <b>Keterangan Foto Saat ini : </b> {{ $a->keterangan }}<br>
-                                        <img class="img-fluid" src="{{ asset('front/assets/img/' . $a->thumbnail) }}"
-                                            alt=""><br><br>
-                                    </div>
-                                @endforeach
+                                @if (count($asset) > 0)
+                                    @foreach ($asset as $a)
+                                        <div>
+                                            <b>Keterangan Foto Saat ini : </b> {{ $a->keterangan }}<br>
+                                            <img class="img-fluid" src="{{ asset('front/assets/img/' . $a->thumbnail) }}"
+                                                alt="">
+                                            <a href="{{ route('administrator.asset.destroy', ['id' => base64_encode($a->id)]) }}"
+                                                class="btn btn-sm btn-danger btn-delete" title="Hapus Asset"><i
+                                                    class="fa fa-trash"></i></a>
+                                            <br><br>
+                                        </div>
+                                    @endforeach
+                                @endif
                             @else
                                 <div id="list_gambar">
 
                                 </div>
                             @endif
-
-
-                            {{-- <label for="image" class="col-sm-12 col-form-label">Thumbnail <span
-                                    class="text-red">*</span></label>
-                            <div class="col-sm-12">
-                                <input type="file" name="image" id="image" class="form-control">
-                                @error('image')
-                                    <small class="text-red">
-                                        <strong>{{ $message }}</strong>
-                                    </small>
-                                @enderror
-
-                                @php
-                                    if ($model->exists) {
-                                        echo 'Thumbnail saat ini: <br>';
-                                        echo '<img class="img-fluid" src="' . asset('front/assets/img/' . $model->thumbnail) . '">';
-                                    }
-                                @endphp
-                            </div> --}}
                         </div>
 
-                        {{-- <div class="form-group">
-                            <label for="background_image" class="col-sm-12 col-form-label">Background Image Artikel</label>
-                            <div class="col-sm-12">
-                                <input type="file" name="background_image" id="background_image" class="form-control">
-                                @error('background_image')
-                                    <small class="text-red">
-                                        <strong>{{ $message }}</strong>
-                                    </small>
-                                @enderror
-                            </div>
-
-                            @php
-                                if ($model->exists) {
-                                    echo 'Thumbnail saat ini: <br>';
-                                    echo '<img class="img-fluid" src="' . asset('front/assets/img/' . $model->background_image) . '">';
-                                }
-                            @endphp
-                        </div> --}}
-
-
-                        {{-- <div class="form-group">
-                            <label for="category" class="col-sm-12 col-form-label">Category<span class="text-red">*</span>
-                                <a href="javascript:void(0)" class="btn btn-xs btn-inventory" id="tambahCategory"><i
-                                        class="fas fa-plus"></i></a></label>
-                            <div id="list_category">
-
-                            </div>
-                        </div> --}}
 
                         <div class="form-group">
                             <label for="active" class="col-sm-12 col-form-label">Active <span

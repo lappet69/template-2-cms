@@ -57,8 +57,8 @@
                         <!-- End testimonial item -->
                     @endforeach
                 </div>
-                {{-- <div class="swiper-button-prev"></div> --}}
-                {{-- <div class="swiper-button-next"></div> --}}
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
             </div>
         </div>
     </section>

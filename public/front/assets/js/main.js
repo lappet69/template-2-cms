@@ -146,6 +146,7 @@
     new Swiper(".other-article-slider", {
         speed: 600,
         loop: false,
+        spaceBetween: 20,
         autoplay: {
             delay: 5000,
             disableOnInteraction: false,

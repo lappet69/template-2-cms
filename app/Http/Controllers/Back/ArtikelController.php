@@ -61,15 +61,13 @@ class ArtikelController extends Controller
             'active.required' => 'Keterangan Wajib Diisi'
         ]);
 
-        $content = $request->content;
-
-        if(isset($content)) {
+        if(isset($request->content)) {
             $dom = new \DomDocument();
-            $dom->loadHtml($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $dom->loadHtml($request->content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
             $imageFile = $dom->getElementsByTagName('imageFile');
         
             foreach($imageFile as $item => $image){
-                $data = $content->getAttribute('src');
+                $data = $request->content->getAttribute('src');
                 list($type, $data) = explode(';', $data);
                 list(, $data)      = explode(',', $data);
                 $imgeData = base64_decode($data);
@@ -81,16 +79,17 @@ class ArtikelController extends Controller
                 $image->setAttribute('src', $image_name);
             }
             $content = $dom->saveHTML();
+        } else {
+            $content = null;
         }
 
         $section = Section::where('slug',request()->segment(2))->first();
-    
 
         $model = new Content();
 
         $model->title = $request->title;
         $model->subtitle = $request->subtitle;
-        $model->slug = $this->textToSlug($request->title);
+        $model->slug = $this->textToSlug($request->title.' '.$request->subtitle);
         $model->short_description = $request->short_description;
         $model->content = $content;
         $model->section_id = $section->id;
@@ -108,31 +107,10 @@ class ArtikelController extends Controller
                 $asset->keterangan = $request->keterangan[$key];
                 $asset->save();
             }
-            // $request->image->move(public_path('front/assets/img'), $fileName);
-            // $model->thumbnail = $fileName;
         }
 
-        // if($request->hasFile('background_image')) {
-        //     foreach($request->file('background_image') as $key => $file) {
-        //         $fileName = time().'-'.Auth::user()->id.'-bg-artikel.'.$file->hashName();
-        //         $file->move(public_path('front/assets/img'), $fileName);
-
-        //         $asset = new Asset();
-        //         $asset->thumbnail = $fileName;
-        //         $asset->content_id = $model->id;
-        //         $asset->keterangan = $request->keterangan[$key];
-        //         $asset->save();
-        //     }
-
-        //     $model->background_image = $fileName;
-        // }
-
-        
-    
-        // dd($content);
-
         if ($model->save()) {
-            return redirect()->route('administrator.artikel.index')->with('alert.success', 'Artikel Has Been Saved');
+            return redirect()->route('administrator.artikel.index')->with('alert.success', 'Artikel Telah Berhasil Disimpan');
         } else {
             return redirect()->route('administrator.artikel.create')->with('alert.failed', 'Something Wrong');
         }
@@ -176,101 +154,80 @@ class ArtikelController extends Controller
         $request->validate([
             'title' => 'required',
             'content' => 'required',
+            'gambar.*'      => 'required|mimes:jpeg,bmp,png,gif,svg,pdf,jpg|max:20480',
         ],
         [
             'title' => 'Judul Artikel Wajib Diisi',
             'content' => 'Konten Artikel Wajib Diisi',
+            'gambar.*'      => 'required|mimes:jpeg,bmp,png,gif,svg,pdf,jpg|max:20480',
         ]);
 
-        $content = $request->content;
-        $dom = new \DomDocument();
-        $dom->loadHtml($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $imageFile = $dom->getElementsByTagName('imageFile');
-    
-        foreach($imageFile as $item => $image){
-            $data = $content->getAttribute('src');
-            list($type, $data) = explode(';', $data);
-            list(, $data)      = explode(',', $data);
-            $imgeData = base64_decode($data);
-            $image_name= "/upload/" . time().$item.'.png';
-            $path = public_path() . $image_name;
-            file_put_contents($path, $imgeData);
-            
-            $image->removeAttribute('src');
-            $image->setAttribute('src', $image_name);
+        if(isset($request->content)) {
+            $dom = new \DomDocument();
+            @$dom->loadHtml($request->content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $imageFile = $dom->getElementsByTagName('imageFile');
+        
+            foreach($imageFile as $item => $image){
+                $data = $request->content->getAttribute('src');
+                list($type, $data) = explode(';', $data);
+                list(, $data)      = explode(',', $data);
+                $imgeData = base64_decode($data);
+                $image_name= "/upload/" . time().$item.'.png';
+                $path = public_path() . $image_name;
+                file_put_contents($path, $imgeData);
+                
+                $image->removeAttribute('src');
+                $image->setAttribute('src', $image_name);
             }
-        
-        $content = $dom->saveHTML();
-        
-        // $files = $request->file('image');
-        // if ($files) {
-        //     $hashName = $files->hashName();
-        //     $folderName = 'artikel';
-        //     $fileName = $hashName;
-        //     $file = storage_path() . '/app/artikel/' . $hashName;
-        //     if (file_exists($file)) {
-        //         Storage::delete($folderName . '/' . $fileName);
-        //     }
-        //     $files->store($folderName);
-        //     // Storage::move($folderName . '/' . $hashName, $folderName . '/' . $fileName);
+            $content = $dom->saveHTML();
+        } else {
+            $content = null;
+        }
 
-        //     // Storage::move('uploads/'.$filename, $file);
-        //     $model->image = $hashName;
-        // }
+        $section = Section::where('slug',request()->segment(2))->first();
 
         $id = base64_decode($id);
         $model = Content::find($id);
 
         $model->title = $request->title;
         $model->subtitle = $request->subtitle;
-        $model->slug = $this->textToSlug($request->title);
+        $model->slug = $this->textToSlug($request->title.' '.$request->subtitle);
         $model->short_description = $request->short_description;
         $model->content = $content;
-        $model->section_id = 2;
+        $model->section_id = $section->id;
         $model->active = $request->active;
         $model->save();
 
         if($request->file('gambar')) {
             foreach($request->file('gambar') as $key => $file) {
-                $asset = Asset::where('content_id',$model->id)->where('keterangan',$request->keterangan[$key])->first();
+                $keterangan = $request->keterangan[$key];
+                $asset = Asset::where('content_id',$model->id)->where('keterangan',$keterangan)->first();
 
-                if(file_exists(public_path('front/assets/img/'.$asset->thumbnail))) {
-                    unlink(public_path('front/assets/img/'.$asset->thumbnail));
-                }
-                
                 $time = time();
                 $fileName =  $time.'-'.Auth::user()->id.'-artikel-'.$file->hashName();
                 $file->move(public_path('front/assets/img'), $fileName);
 
-                $asset_model = Asset::find($asset->id);
-                $asset_model->thumbnail = $fileName;
-                $asset_model->keterangan = $request->keterangan[$key];
-                $asset_model->save();
+                if($asset) {
+                    if(file_exists(public_path('front/assets/img/'.$asset->thumbnail))) {
+                        unlink(public_path('front/assets/img/'.$asset->thumbnail));
+                    }
+    
+                    $asset_model = Asset::find($asset->id);
+                    $asset_model->thumbnail = $fileName;
+                    $asset_model->keterangan = $request->keterangan[$key];
+                    $asset_model->save();
+                } else {
+                    $asset = new Asset();
+                    $asset->thumbnail = $fileName;
+                    $asset->content_id = $model->id;
+                    $asset->keterangan = $request->keterangan[$key];
+                    $asset->save();
+                }
             }
-
-            // $time = time();
-            // $fileName = $time.'-'.Auth::user()->id.'-bg-artikel.'.$request->background_image->extension();
-
-            // $request->background_image->move(public_path('front/assets/img'), $fileName);
-            // $model->background_image = $fileName;
         }
 
-        // if($request->hasFile('image')) {
-        //     if(file_exists(public_path('front/assets/img/'.$model->thumbnail))) {
-        //         unlink(public_path('front/assets/img/'.$model->thumbnail));
-        //     }
-
-        //     $time = time();
-        //     $fileName = $time.'-'.Auth::user()->id.'-artikel.'.$request->image->extension();
-
-        //     $request->image->move(public_path('front/assets/img'), $fileName);
-        //     $model->thumbnail = $fileName;
-        // }
-        
-        
-
         if ($model->save()) {
-            return redirect()->route('administrator.artikel.index')->with('alert.success', 'Artikel Has Been Updated');
+            return redirect()->route('administrator.artikel.index')->with('alert.success', 'Artikel Berhasil Diperbaharui');
         } else {
             return redirect()->route('administrator.artikel.create')->with('alert.failed', 'Something Wrong');
         }

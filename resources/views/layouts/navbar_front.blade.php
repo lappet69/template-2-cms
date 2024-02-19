@@ -8,11 +8,14 @@
 
         <nav id="navbar" class="navbar order-last order-lg-0">
             <ul>
-                <li><a class="active" href="{{ route('index') }}">Home</a></li>
-                <li class="dropdown">
-                    <a href="{{ route('program') }}"><span>Program</span> </a>
+                <li><a class="{{ request()->segment(1) == '' ? 'active' : '' }}" href="{{ route('index') }}">Home</a>
                 </li>
-                <li><a href="{{ route('about') }}">About</a></li>
+                <li class="dropdown">
+                    <a href="{{ route('program') }}"
+                        class="{{ request()->segment(1) == 'program' ? 'active' : '' }}"><span>Program</span> </a>
+                </li>
+                <li><a href="{{ route('about') }}"
+                        class="{{ request()->segment(1) == 'about' ? 'active' : '' }}">About</a></li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav>

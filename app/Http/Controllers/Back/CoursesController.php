@@ -132,7 +132,7 @@ class CoursesController extends Controller
         }
 
         if ($model->save()) {
-            return redirect()->route('administrator.courses.index')->with('alert.success', 'Courses telah berhasil Disimpan');
+            return redirect()->route('administrator.courses.index')->with('alert.success', 'Courses Telah Berhasil Disimpan');
         } else {
             return redirect()->route('administrator.courses.create')->with('alert.failed', 'Something Wrong');
         }
@@ -263,8 +263,6 @@ class CoursesController extends Controller
                     $asset->keterangan = $request->keterangan[$key];
                     $asset->save();
                 }
-                
-
             }
         }
         
