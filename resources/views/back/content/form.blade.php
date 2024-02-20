@@ -55,7 +55,9 @@
                             <select class="form-control select2" name="section_id" id="section_id">
                                 <option value="">Pilih Section</option>
                                 @foreach (App\Models\Section::all() as $section)
-                                    <option value="{{ $section->id }}">{{ $section->name }}</option>
+                                    <option value="{{ $section->id }}"
+                                        {{ $model->exists ? ($model->section_id == $section->id ? 'selected' : '') : '' }}>
+                                        {{ $section->name }}</option>
                                 @endforeach
                             </select>
 
@@ -72,7 +74,8 @@
                             <select class="form-control select2" name="parent_content_id" id="parent_content_id">
                                 <option value="">--Pilih Section - Konten--</option>
                                 @foreach ($contents as $content)
-                                    <option value="{{ $content->id }}">
+                                    <option value="{{ $content->id }}"
+                                        {{ $model->exists ? ($model->parent_content_id == $content->id ? 'selected' : '') : '' }}>
                                         {{ $content->section->name . ' - ' . $content->title }}</option>
                                 @endforeach
                             </select>
@@ -127,7 +130,7 @@
                         <div class="form-group">
                             <label for="content" class="col-sm-12 col-form-label">Konten</label>
                             <div class="col-sm-12">
-                                <textarea name="content" rows="5" class="summernote @error('content') is-invalid @enderror">{{ $model->exists ? $model->content : old('content') }}</textarea>
+                                <textarea name="content" rows="5" class="tiny @error('content') is-invalid @enderror">{{ $model->exists ? $model->content : old('content') }}</textarea>
                                 @error('content')
                                     <small class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
@@ -217,6 +220,57 @@
 
     <!-- Summernote -->
     <script src="{{ asset('back/adminlte/plugins/summernote/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('back/adminlte/plugins/tinymce/js/tinymce/tinymce.min.js') }}"></script>
+    <script type='text/javascript'>
+        tinymce.init({
+            selector: 'textarea.tiny',
+            plugins: 'lists table image',
+            menubar: 'file edit view format insert table',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons | numlist bullist | table',
+            /* enable title field in the Image dialog*/
+            image_title: true,
+            /* enable automatic uploads of images represented by blob or data URIs*/
+            automatic_uploads: true,
+            /*
+              URL of our upload handler (for more details check: https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_url)
+              images_upload_url: 'postAcceptor.php',
+              here we add custom filepicker only to Image dialog
+            */
+            file_picker_types: 'image',
+            /* and here's our custom image picker*/
+            file_picker_callback: (cb, value, meta) => {
+                const input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                input.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+
+                    const reader = new FileReader();
+                    reader.addEventListener('load', () => {
+                        /*
+                          Note: Now we need to register the blob in TinyMCEs image blob
+                          registry. In the next release this part hopefully won't be
+                          necessary, as we are looking to handle it internally.
+                        */
+                        const id = 'blobid' + (new Date()).getTime();
+                        const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        const base64 = reader.result.split(',')[1];
+                        const blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        /* call the callback and populate the Title field with the file name */
+                        cb(blobInfo.blobUri(), {
+                            title: file.name
+                        });
+                    });
+                    reader.readAsDataURL(file);
+                });
+
+                input.click();
+            },
+        });
+    </script>
     <script>
         function deleteGambar(btn, norow) {
             var row = btn.parentNode;

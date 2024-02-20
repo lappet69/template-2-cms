@@ -87,8 +87,8 @@
                         name: 'background_image'
                     },
                     {
-                        data: 'thumbnail',
-                        name: 'thumbnail'
+                        data: 'thumb',
+                        name: 'thumb'
                     },
                     {
                         data: 'active',

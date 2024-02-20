@@ -1,5 +1,19 @@
 @extends('layouts.app_register')
-
+@php
+    $identitas = \App\Models\Identitas::where('active', '1')->limit(1)->first();
+@endphp
+@push('meta')
+    <meta name="description" content="{{ $identitas->short_description }}" />
+    <link rel="canonical" href="{{ route('index') . '/' . request()->segment(1) }}">
+    <meta property="og:type" content="{{ !empty(request()->segment(1)) ? request()->segment(1) : 'home' }}" />
+    <meta property="og:title" content="{{ $identitas->nama_website }}" />
+    <meta property="og:description" content="{{ $identitas->short_description }}" />
+    <meta property="article:published_time" content="{{ $identitas->created_at }}">
+    <meta property="article:modified_time" content="{{ $identitas->updated_at }}">
+    <meta name="author" content="{{ Auth::user()->name }}">
+    <meta property="og:url" content="{{ request()->fullUrl() }}" />
+    <meta property="og:site_name" content="Phincon Academy" />
+@endpush
 @section('content')
     <div class="row d-flex justify-content-center align-items-center">
         <div class="col">
@@ -29,7 +43,8 @@
                                     @foreach ($program as $p)
                                         <button
                                             class="col-12 col-md-6 col-lg-3 registration-offline d-flex justify-content-center align-items-center"
-                                            id="program{{ $p->id }}" onclick="courseSelection({{ $p->id }})">
+                                            id="program{{ $p->id }}"
+                                            onclick="courseSelection({{ $p->id }})">
                                             <p>{{ $p->title }}</p>
                                         </button>
                                     @endforeach
@@ -147,7 +162,8 @@
                                             <div class="col-md-6 mb-4">
                                                 <div class="form-outline">
                                                     <label class="form-label" for="kota_domisili">Kota Domisili</label>
-                                                    <select class="form-select @error('kota_domisili') is-invalid @enderror"
+                                                    <select
+                                                        class="form-select @error('kota_domisili') is-invalid @enderror"
                                                         id="kota_domisili" name="kota_domisili"
                                                         value="{{ old('kota_domisili') }}">
                                                         <option value="">-Pilih Kota Domisili-</option>

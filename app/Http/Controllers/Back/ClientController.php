@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Asset;
 use App\Models\Content;
 use App\Models\Section;
+use App\Services\Content as ServicesContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -209,8 +210,7 @@ class ClientController extends Controller
     {
         $section = Section::where('slug',request()->segment(2))->first();
 
-        $query = Asset::leftJoin('contents as c','c.id','=','assets.content_id')->where('c.section_id',$section->id)
-        ->select('assets.id','assets.thumbnail','c.title')->orderBy('assets.id','asc');
+        $query = ServicesContent::listClient($section->id);
         return DataTables::of($query)
             ->addColumn('action', function ($model) {
                 $string = '<div class="btn-group">';

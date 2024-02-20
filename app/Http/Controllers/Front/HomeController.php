@@ -35,8 +35,8 @@ class HomeController extends Controller
 
     public function about()
     {
-        $data['about'] = Content::leftJoin('assets as a','a.content_id','=','contents.id')->where('contents.section_id','=',10)->where('contents.slug','=','about-background')->where('contents.active','=',1)
-                        ->select('contents.id','contents.title','contents.subtitle','contents.short_description','a.thumbnail as thumbnail')->limit(1)->first();
+        $data['about'] = Content::leftJoin('assets as a','a.content_id','=','contents.id')->where('contents.section_id','=',10)->where('contents.slug','=','about-phincon-academy')->where('contents.active','=',1)
+                        ->select('contents.*','a.thumbnail as thumbnail')->limit(1)->first();
         $data['vision'] = Content::leftJoin('assets as a','a.content_id','=','contents.id')->where('contents.section_id','=',10)->where('contents.slug','=','vission-thumbnail')->where('contents.active','=',1)
                         ->select('contents.id','contents.title','contents.subtitle','contents.short_description','a.thumbnail as thumbnail')->limit(1)->first();
         $data['mission'] = Content::leftJoin('assets as a','a.content_id','=','contents.id')->where('contents.section_id','=',10)->where('contents.slug','=','mission-thumbnail')->where('contents.active','=',1)

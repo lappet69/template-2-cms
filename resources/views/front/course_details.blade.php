@@ -1,5 +1,16 @@
 @extends('layouts.app_front')
-
+@push('meta')
+    <meta name="description" content="{{ $detailcourse->short_description }}!" />
+    <link rel="canonical" href="{{ route('index') . '/' . request()->segment(1) }}">
+    <meta property="og:type" content="{{ request()->segment(1) }}" />
+    <meta property="og:title" content="{{ $detailcourse->title . ' ' . $detailcourse->subtitle }}" />
+    <meta property="og:description" content="{{ $detailcourse->short_description }}" />
+    <meta property="article:published_time" content="{{ $detailcourse->created_at }}">
+    <meta property="article:modified_time" content="{{ $detailcourse->updated_at }}">
+    <meta name="author" content="{{ Auth::user()->name }}">
+    <meta property="og:url" content="{{ request()->fullUrl() }}" />
+    <meta property="og:site_name" content="Phincon Academy" />
+@endpush
 @push('css')
     <style>
         .btn-register {
@@ -160,7 +171,6 @@
         </section>
         <!-- End Alumni Company Section -->
     @endif
-
     <!-- ======= Bootcamp Phase Section ======= -->
     <section id="bootcamp-phase" class="bootcamp-phase">
         <div class="container-academy" data-aos="fade-up">
@@ -276,7 +286,8 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body modal-syllabus-body">
                             <h2>Silabus Program IOS Swift</h2>
@@ -330,7 +341,8 @@
                 </div>
             </div>
         </div>
-        <img src="{{ asset('front/assets/img/bootcamp-phase-bg.png') }}" class="img-fluid" alt="" />
+        <img src="{{ asset('front/assets/img/bootcamp-phase-bg.png') }}" class="bootcamp-phase-background img-fluid"
+            alt="" />
     </section>
     <!-- End Bootcamp Phase Section -->
 

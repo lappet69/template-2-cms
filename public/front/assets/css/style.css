@@ -2419,17 +2419,19 @@ main {
     .bootcamp-phase .bootcamp-phase-body {
         padding-top: 50px;
     }
-
+    /* 
     .bootcamp-phase .faq-list ul {
         padding: 0;
         list-style-type: none;
-    }
+    } */
 
     .bootcamp-phase .faq-list li + li {
         margin-top: 15px;
     }
 
     .bootcamp-phase .bootcamp-phase-body .faq-list .bootcamp-phase-list-li {
+        /* padding: 0; */
+        list-style-type: none;
         padding: 30px;
         background: #fff;
         border-radius: 4px;
@@ -2497,7 +2499,7 @@ main {
         display: none;
     }
 
-    .bootcamp-phase .faq-list .faq-list-detail h3 {
+    /* .bootcamp-phase .faq-list .faq-list-detail h3 {
         font-size: 20px;
         font-weight: bold;
         letter-spacing: 0.4px;
@@ -2505,7 +2507,7 @@ main {
         text-shadow: 0px 14px 30px #0000001a;
         opacity: 1;
         margin-bottom: 0;
-    }
+    } */
 
     .bootcamp-phase .faq-list .faq-list-detail .point {
         width: 8px;
@@ -2540,7 +2542,7 @@ main {
         justify-content: center;
     }
 
-    .bootcamp-phase img {
+    .bootcamp-phase .bootcamp-phase-background {
         float: right;
         margin-right: 10px;
     }
@@ -2564,17 +2566,19 @@ main {
     .bootcamp-phase .bootcamp-phase-body {
         padding-top: 50px;
     }
-
+    /* 
     .bootcamp-phase .faq-list ul {
         padding: 0;
         list-style-type: none;
-    }
+    } */
 
     .bootcamp-phase .faq-list li + li {
         margin-top: 15px;
     }
 
     .bootcamp-phase .bootcamp-phase-body .faq-list .bootcamp-phase-list-li {
+        /* padding: 0; */
+        list-style-type: none;
         padding: 30px;
         background: #fff;
         border-radius: 4px;
@@ -2642,7 +2646,7 @@ main {
         display: none;
     }
 
-    .bootcamp-phase .faq-list .faq-list-detail h3 {
+    /* .bootcamp-phase .faq-list .faq-list-detail h3 {
         font-size: 20px;
         font-weight: bold;
         letter-spacing: 0.4px;
@@ -2650,7 +2654,7 @@ main {
         text-shadow: 0px 14px 30px #0000001a;
         opacity: 1;
         margin-bottom: 0;
-    }
+    } */
 
     .bootcamp-phase .faq-list .faq-list-detail .point {
         width: 8px;
@@ -2685,7 +2689,7 @@ main {
         justify-content: center;
     }
 
-    .bootcamp-phase img {
+    .bootcamp-phase .bootcamp-phase-background {
         float: right;
         margin-right: 10px;
     }
@@ -2706,16 +2710,18 @@ main {
         padding-top: 50px;
     }
 
-    .bootcamp-phase .faq-list ul {
+    /* .bootcamp-phase .faq-list ul {
         padding: 0;
         list-style-type: none;
-    }
+    } */
 
     .bootcamp-phase .faq-list li + li {
         margin-top: 15px;
     }
 
     .bootcamp-phase .bootcamp-phase-body .faq-list .bootcamp-phase-list-li {
+        /* padding: 0; */
+        list-style-type: none;
         padding: 15px;
         background: #fff;
         border-radius: 4px;
@@ -2783,7 +2789,7 @@ main {
         display: none;
     }
 
-    .bootcamp-phase .faq-list .faq-list-detail h3 {
+    /* .bootcamp-phase .faq-list .faq-list-detail h3 {
         font-size: 20px;
         font-weight: bold;
         letter-spacing: 0.4px;
@@ -2791,7 +2797,7 @@ main {
         text-shadow: 0px 14px 30px #0000001a;
         opacity: 1;
         margin-bottom: 0;
-    }
+    } */
 
     .bootcamp-phase .faq-list .faq-list-detail .point {
         width: 8px;
@@ -2826,7 +2832,7 @@ main {
         justify-content: center;
     }
 
-    .bootcamp-phase img {
+    .bootcamp-phase .bootcamp-phase-background {
         float: right;
         margin-right: 10px;
     }
@@ -2847,16 +2853,18 @@ main {
         padding-top: 50px;
     }
 
-    .bootcamp-phase .faq-list ul {
+    /* .bootcamp-phase .faq-list ul {
         padding: 0;
         list-style-type: none;
-    }
+    } */
 
     .bootcamp-phase .faq-list li + li {
         margin-top: 15px;
     }
 
     .bootcamp-phase .bootcamp-phase-body .faq-list .bootcamp-phase-list-li {
+        /* padding: 0; */
+        list-style-type: none;
         padding: 15px;
         background: #fff;
         border-radius: 4px;
@@ -2924,7 +2932,7 @@ main {
         display: none;
     }
 
-    .bootcamp-phase .faq-list .faq-list-detail h3 {
+    /* .bootcamp-phase .faq-list .faq-list-detail h3 {
         font-size: 20px;
         font-weight: bold;
         letter-spacing: 0.4px;
@@ -2932,7 +2940,7 @@ main {
         text-shadow: 0px 14px 30px #0000001a;
         opacity: 1;
         margin-bottom: 0;
-    }
+    } */
 
     .bootcamp-phase .faq-list .faq-list-detail .point {
         width: 8px;
@@ -2967,8 +2975,8 @@ main {
         justify-content: center;
     }
 
-    .bootcamp-phase img {
-        /* float: right; */
+    .bootcamp-phase .bootcamp-phase-background {
+        float: right;
         margin: 10px;
     }
 }

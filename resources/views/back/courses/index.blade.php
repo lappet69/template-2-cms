@@ -29,7 +29,7 @@
                                 <th class="no-sort" style="width: 30px">No</th>
                                 <th>Course</th>
                                 <th>Program</th>
-                                <th>Thumbnail</th>
+                                <th>Konten Anak</th>
                                 <th>Active</th>
                                 <th class="no-sort"></th>
                             </tr>
@@ -82,8 +82,8 @@
                         name: 'program'
                     },
                     {
-                        data: 'program',
-                        name: 'program'
+                        data: 'child_content',
+                        name: 'child_content'
                     },
                     {
                         data: 'active',

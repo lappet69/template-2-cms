@@ -259,11 +259,16 @@ class AboutController extends Controller
                 $string .= '<a href="' . route('administrator.about.edit', ['id' => base64_encode($model->id)]) . '" type="button"  class="btn btn-sm btn-info" title="Edit About"><i class="fas fa-edit"></i></a>';
                 $string .= '&nbsp;&nbsp;<a href="' . route('administrator.about.destroy', ['id' => base64_encode($model->id)]) . '" type="button" class="btn btn-sm btn-danger btn-delete" title="Hapus About"><i class="fa fa-trash"></i></a>';
                 $string .= '</div>';
-                return
-                    $string;
+                return $string;
+            })
+            ->addColumn('thumb', function($model) {
+                $asset = Asset::where('content_id',$model->id)->where('keterangan','thumbnail')->first();
+                $thumbnail = '<img src="'.asset('front/assets/img/'.$asset->thumbnail).'" width="200px" height="75px">';
+                return $thumbnail;
+
             })
             ->addIndexColumn()
-            ->rawColumns(['action'])
+            ->rawColumns(['action','thumb'])
             ->make(true);
     }
 
