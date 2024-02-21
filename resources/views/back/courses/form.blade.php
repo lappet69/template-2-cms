@@ -118,12 +118,11 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="content" class="col-sm-12 col-form-label">Konten <span
                                     class="text-red">*</span></label>
                             <div class="col-sm-12">
                                 <textarea name="content" class="summernote" rows="5">
-                                    {{-- {{ $model->exists ? $model->content : old('content') }} --}}
                                 </textarea>
                                 @error('content')
                                     <small class="text-red">
@@ -131,7 +130,7 @@
                                     </small>
                                 @enderror
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="form-group">
                             <label for="gambar" class="col-sm-12 col-form-label">Gambar<span class="text-red">*</span>

@@ -17,6 +17,11 @@ class Content extends Model
         return $this->hasOne(Section::class, 'id', 'section_id');
     }
 
+    public function parentcontent()
+    {
+        return $this->belongsTo(Content::class, 'parent_content_id', 'id');
+    }
+
     public function childcontent()
     {
         return $this->hasMany(Content::class, 'parent_content_id', 'id');

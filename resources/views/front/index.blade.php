@@ -1,10 +1,21 @@
 @extends('layouts.app_front')
-
+@php
+    $identitas = \App\Models\Identitas::where('active', '1')->limit(1)->first();
+@endphp
+@push('meta')
+    <meta name="description" content="{{ $identitas->short_description }}" />
+    <link rel="canonical" href="{{ route('index') . '/' . request()->segment(1) }}">
+    <meta property="og:type" content="{{ !empty(request()->segment(1)) ? request()->segment(1) : 'home' }}" />
+    <meta property="og:title" content="{{ $identitas->nama_website }}" />
+    <meta property="og:description" content="{{ $identitas->short_description }}" />
+    <meta property="article:published_time" content="{{ $identitas->created_at }}">
+    <meta property="article:modified_time" content="{{ $identitas->updated_at }}">
+    <meta name="author" content="{{ Auth::user()->name }}">
+    <meta property="og:url" content="{{ request()->fullUrl() }}" />
+    <meta property="og:site_name" content="Phincon Academy" />
+@endpush
 @section('content')
-    @php
-        $identitas = \App\Models\Identitas::where('active', '1')->limit(1)->first();
 
-    @endphp
 
     <!-- ======= Hero Slider Section ======= -->
     <div class="container-academy">
@@ -13,8 +24,8 @@
                 <div class="swiper-wrapper" data-aos="fade-in">
                     @foreach ($banner as $slider)
                         <div class="swiper-slide">
-                            <img src="{{ asset('front/assets/img/' . $slider->thumbnail) }}" class="img-fluid" alt=""
-                                style="border-radius: 20px" />
+                            <img src="{{ asset('front/assets/img/' . $slider->thumbnail) }}" class="img-fluid"
+                                alt="" style="border-radius: 20px" />
                         </div>
                     @endforeach
                 </div>
@@ -191,8 +202,8 @@
                         <div class="swiper-slide">
                             <div class="testimonial-item">
                                 <div class="testimonial-content">
-                                    <img src="{{ asset('front/assets/img/' . $testi->thumbnail) }}" class="testimonial-img"
-                                        alt="" />
+                                    <img src="{{ asset('front/assets/img/' . $testi->thumbnail) }}"
+                                        class="testimonial-img" alt="" />
                                     <p>{{ $testi->short_description }}</p>
                                     <div class="testimonial-profile">
                                         <h3>{{ $testi->title }}</h3>

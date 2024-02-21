@@ -36,6 +36,15 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('front/assets/css/style.css') }}" rel="stylesheet" />
     <link href="{{ asset('front/assets/css/mobile-styles.css') }}" rel="stylesheet" />
+
+    <meta content="" name="keywords" />
+
+    <meta name='robots' content='index, follow' />
+
+    <meta property="og:locale" content="id_ID" />
+
+    @stack('meta')
+
     @stack('css')
     @stack('styles')
 </head>

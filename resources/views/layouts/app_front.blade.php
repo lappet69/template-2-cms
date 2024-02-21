@@ -6,8 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
     <title>Home</title>
-    <meta content="" name="description" />
-    <meta content="" name="keywords" />
+
 
     <!-- Favicons -->
     <link href="{{ asset('front/assets/img/favicon.png') }}" rel="icon" />
@@ -33,6 +32,14 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('front/assets/css/style.css') }}" rel="stylesheet" />
     <link href="{{ asset('front/assets/css/mobile-styles.css') }}" rel="stylesheet" />
+
+    <meta content="" name="keywords" />
+
+    <meta name='robots' content='index, follow' />
+
+    <meta property="og:locale" content="id_ID" />
+
+    @stack('meta')
     @stack('css')
     @stack('styles')
 </head>
@@ -40,9 +47,7 @@
 <body>
 
     @php
-        $identitas = \App\Models\Identitas::where('active', '1')
-            ->limit(1)
-            ->first();
+        $identitas = \App\Models\Identitas::where('active', '1')->limit(1)->first();
     @endphp
 
     @include('layouts.navbar_front')

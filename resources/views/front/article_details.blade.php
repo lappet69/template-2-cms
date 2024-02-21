@@ -1,4 +1,16 @@
 @extends('layouts.app_front')
+@push('meta')
+    <meta name="description" content="{{ $artikel->short_description }}!" />
+    <link rel="canonical" href="{{ route('index') . '/' . request()->segment(1) }}">
+    <meta property="og:type" content="{{ request()->segment(1) }}" />
+    <meta property="og:title" content="{{ $artikel->title . ' ' . $artikel->subtitle }}" />
+    <meta property="og:description" content="{{ $artikel->short_description }}" />
+    <meta property="article:published_time" content="{{ $artikel->created_at }}">
+    <meta property="article:modified_time" content="{{ $artikel->updated_at }}">
+    <meta name="author" content="{{ Auth::user()->name }}">
+    <meta property="og:url" content="{{ request()->fullUrl() }}" />
+    <meta property="og:site_name" content="Phincon Academy" />
+@endpush
 
 @section('content')
     <!-- ======= Breadcrumbs ======= -->

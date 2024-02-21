@@ -7,6 +7,7 @@ use App\Models\Asset;
 use App\Models\Content;
 use App\Models\Informasi;
 use App\Models\Section;
+use App\Services\Content as ServicesContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -301,8 +302,9 @@ class CoursesController extends Controller
     public function datatable(Request $request)
     {
         $section = Section::where('slug',request()->segment(2))->first();
-        $query = Content::leftJoin('contents as c','c.id','=','contents.parent_content_id')->where('contents.section_id','=',$section->id)
-        ->select('contents.id','contents.title','c.title as program','contents.active');
+        $query = ServicesContent::listCourse($section->id,'program');
+        // $query = Content::leftJoin('contents as c','c.id','=','contents.parent_content_id')->where('contents.section_id','=',$section->id)
+        // ->select(['contents.id','contents.title','c.title as program','contents.active']);
         return DataTables::of($query)
             ->addColumn('action', function ($model) {
                 $string = '<div class="btn-group">';
@@ -311,8 +313,17 @@ class CoursesController extends Controller
                 $string .= '</div>';
                 return $string;
             })
+            ->addColumn('child_content', function($model) {
+                $child = Content::where('parent_content_id',$model->id)->get();
+                $li = '<ul>';
+                foreach($child as $key => $item) {
+                    $li .= '<li><a href="'.route('administrator.content.edit', ['id' => base64_encode($item->id)]).'">'.$item->title.'</a></li>';
+                }
+                $li .= '</ul>';
+                return $li;
+            })
             ->addIndexColumn()
-            ->rawColumns(['action'])
+            ->rawColumns(['action','child_content'])
             ->make(true);
     }
 

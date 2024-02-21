@@ -82,8 +82,6 @@ class ContentController extends Controller
 
         $model = new Content();
 
-       
-
         $model->section_id = $request->section_id;
         $model->parent_content_id = $request->parent_content_id;
         $model->title = $request->title;
@@ -140,9 +138,11 @@ class ContentController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'title' => 'required',
             'active' => 'required',
         ],
         [
+            'title.required' => 'Judul Wajib Diisi',
             'active' => 'Keterangan Wajib Diisi',
         ]);
 
@@ -172,24 +172,6 @@ class ContentController extends Controller
         $id = base64_decode($id);
         $model = Content::find($id);
 
-        $files = $request->file('img');
-        if ($files) {
-            $hashName = $files->hashName();
-            $folderName = 'banner';
-            $fileName = $hashName;
-            $old_img = $model->img;
-            $old_file = storage_path() . '/app/banner/' . $old_img;
-            $file = storage_path() . '/app/banner/' . $hashName;
-            if (file_exists($old_file)) {
-                Storage::delete($folderName . '/' . $old_img);
-            }
-            $files->store($folderName);
-            // Storage::move($folderName . '/' . $hashName, $folderName . '/' . $fileName);
-
-            // Storage::move('uploads/'.$filename, $file);
-            $model->img = $hashName;
-        }
-
         $model->section_id = $request->section_id;
         $model->parent_content_id = $request->parent_content_id;
         $model->title = $request->title;
@@ -200,9 +182,9 @@ class ContentController extends Controller
         $model->save();
 
         if ($model->save()) {
-            return redirect()->route('administrator.banner.index')->with('alert.success', 'Banner telah Diperbaharui');
+            return redirect()->route('administrator.content.index')->with('alert.success', 'Konten telah Diperbaharui');
         } else {
-            return redirect()->route('administrator.banner.create')->with('alert.failed', 'Something Wrong');
+            return redirect()->route('administrator.content.create')->with('alert.failed', 'Something Wrong');
         }
     }
 
