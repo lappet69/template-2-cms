@@ -50,8 +50,12 @@ class HomeController extends Controller
     }
     public function articledetails($slug)
     {
+        $artikel = Content::where('slug','=',$slug)->firstOrFail();
+        $artikel->counter = $artikel->counter + 1;
+        $artikel->save();
+
+        $data['artikel'] = $artikel;
         $data['other_article'] = Content::where('section_id',2)->where('active',1)->limit(3)->orderBy('id','asc')->get();
-        $data['artikel'] = Content::where('slug','=',$slug)->firstOrFail();
         $data['program'] = Content::where('section_id','=',3)->where('active',1)->get();
         $data['konsultasi'] = Content::leftJoin('assets as a','a.content_id','=','contents.id')->where('contents.section_id','=',13)
                         ->where('contents.active',1)->limit(1)->first();

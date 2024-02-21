@@ -31,6 +31,7 @@
                                 <th>Sub Judul</th>
                                 <th>Foto</th>
                                 <th>Slug</th>
+                                <th>Views</th>
                                 <th>Aktif</th>
                                 <th class="no-sort"></th>
                             </tr>
@@ -93,6 +94,10 @@
                     {
                         data: 'active',
                         name: 'active'
+                    },
+                    {
+                        data: 'counter',
+                        name: 'counter'
                     },
                     {
                         data: 'action',
