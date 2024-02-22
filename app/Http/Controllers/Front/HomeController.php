@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Models\Asset;
 use App\Models\Content;
+use App\Models\Section;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -71,6 +72,10 @@ class HomeController extends Controller
     }
     public function coursedetails($slug)
     {
+        $content = Content::where('slug','=',$slug)->firstOrFail();
+        $content->counter = $content->counter + 1;
+        $content->save();
+
         $data['detailcourse'] = Content::where('slug','=',$slug)->firstOrFail();
         $data['program'] = Content::where('section_id','=',3)->where('active',1)->get();
         $data['konsultasi'] = Content::leftJoin('assets as a','a.content_id','=','contents.id')->where('contents.section_id','=',13)

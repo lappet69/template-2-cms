@@ -92,12 +92,12 @@
                         name: 'slug'
                     },
                     {
-                        data: 'active',
-                        name: 'active'
-                    },
-                    {
                         data: 'counter',
                         name: 'counter'
+                    },
+                    {
+                        data: 'active',
+                        name: 'active'
                     },
                     {
                         data: 'action',

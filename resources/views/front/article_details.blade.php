@@ -7,7 +7,7 @@
     <meta property="og:description" content="{{ $artikel->short_description }}" />
     <meta property="article:published_time" content="{{ $artikel->created_at }}">
     <meta property="article:modified_time" content="{{ $artikel->updated_at }}">
-    <meta name="author" content="{{ Auth::user()->name }}">
+    <meta name="author" content="{{ $artikel->created_by }}">
     <meta property="og:url" content="{{ request()->fullUrl() }}" />
     <meta property="og:site_name" content="Phincon Academy" />
 @endpush
@@ -34,10 +34,20 @@
     <!-- ======= Article Details Section ======= -->
     <section id="article-detail" class="article-detail">
         <div class="container-academy" data-aos="fade-up">
-            <div class="article-detail-img mb-5">
-                <img src="{{ asset('front/assets/img/' . $background_image->thumbnail) }}" style="border-radius: 20px;"
-                    class="img-fluid h-auto" alt="" />
+            <div class="article-detail-img img-fluid mb-2"
+                style="background-image: url('{{ asset('front/assets/img/' . $background_image->thumbnail) }}'); 
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: unset;
+                border-radius: 20px;
+                height: 550px;">
+                <h2 class="text-white head-title-article">{{ $artikel->title }}
+                    <i class="ms-2 mb-0 my-auto bi bi-arrow-right-circle"></i>
+                </h2>
+                <p class="text-white desc-title-article">{{ $artikel->subtitle }}</p>
             </div>
+            <p class="mb-3" style="font-size: 14px; letter-spacing: .3px;"> Wednesday,
+                {{ date('d-m-Y', strtotime('created_ats')) }}</p>
             {!! $artikel->content !!}
 
         </div>

@@ -8,7 +8,7 @@ class Content {
     public static function listCourse($where,$where2) {
         return DB::select("
             SELECT
-            child.id, child.title, child.active, parent.title AS program
+            child.id, child.title, child.active, child.counter, parent.title AS program
             FROM
             contents AS child
             LEFT JOIN contents AS parent ON child.parent_content_id = parent.id

@@ -10,7 +10,6 @@
     <meta property="og:description" content="{{ $identitas->short_description }}" />
     <meta property="article:published_time" content="{{ $identitas->created_at }}">
     <meta property="article:modified_time" content="{{ $identitas->updated_at }}">
-    <meta name="author" content="{{ Auth::user()->name }}">
     <meta property="og:url" content="{{ request()->fullUrl() }}" />
     <meta property="og:site_name" content="Phincon Academy" />
 @endpush
@@ -29,7 +28,7 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="swiper-pagination">q</div>
+                <div class="swiper-pagination"></div>
                 {{-- <div class="swiper-button-prev"></div> --}}
                 {{-- <div class="swiper-button-next"></div> --}}
             </section>
@@ -58,18 +57,15 @@
                             ->first();
                     @endphp
 
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <a href="{{ route('article-details', $art->slug) }}" class="img-bg-article d-flex align-items-end"
-                            style="
-                            background-image: url('{{ asset('front/assets/img/' . $thumbnail->thumbnail) }}');
-                            background-size: contain;
-                            background-repeat: no-repeat;
-                            background-position: center center;
-                            border-radius: 20px;
-                            ">
-                            {{-- <div class="img-bg-article-inner d-flex align-items-end">
-                                <p class="text-black">{{ $art->title . ' ' . $art->subtitle }}</p>
-                            </div> --}}
+                    <div class="col-12 col-sm-6 col-lg-3 mb-lg-0 mb-3">
+                        <a href="{{ route('article-details', $art->slug) }}">
+                            <img src="{{ asset('front/assets/img/' . $thumbnail->thumbnail) }}"
+                                class="img-bg-article w-100" style="border-radius: 15px;">
+                            <div class="img-bg-article-inner img-pos-thumb">
+                                <h4 class="text-white title-home-article-thumb">{{ $art->title }} <i
+                                        class="ms-2 mb-0 my-auto bi bi-arrow-right-circle"></i><br>&nbsp;</h4>
+                                <p class="text-white desc-home-article-thumb">{{ $art->subtitle }}</p>
+                            </div>
                         </a>
                     </div>
                 @endforeach

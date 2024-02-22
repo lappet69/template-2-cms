@@ -9526,3 +9526,35 @@ main {
         text-decoration: none;
     }
 }
+
+.head-title-article {
+    font-size: 50px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    line-height: 55px;
+    width: 25%;
+    padding: 205px 0 0px 55px;
+}
+.desc-title-article {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    padding: 52px 0 0 75px;
+}
+.img-pos-thumb {
+    position: relative;
+    top: -117px;
+}
+.title-home-article-thumb {
+    font-size: 18px;
+    font-weight: normal;
+    letter-spacing: 0.3px;
+    /* width: 50%; */
+    padding: 24px 0 0 13px;
+}
+.desc-home-article-thumb {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding: 0 0 0 22px;
+}

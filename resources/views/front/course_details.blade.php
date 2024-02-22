@@ -7,7 +7,7 @@
     <meta property="og:description" content="{{ $detailcourse->short_description }}" />
     <meta property="article:published_time" content="{{ $detailcourse->created_at }}">
     <meta property="article:modified_time" content="{{ $detailcourse->updated_at }}">
-    <meta name="author" content="{{ Auth::user()->name }}">
+    <meta name="author" content="{{ $detailcourse->created_by }}">
     <meta property="og:url" content="{{ request()->fullUrl() }}" />
     <meta property="og:site_name" content="Phincon Academy" />
 @endpush

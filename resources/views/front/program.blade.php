@@ -10,7 +10,6 @@
     <meta property="og:description" content="{{ $identitas->short_description }}" />
     <meta property="article:published_time" content="{{ $identitas->created_at }}">
     <meta property="article:modified_time" content="{{ $identitas->updated_at }}">
-    <meta name="author" content="{{ Auth::user()->name }}">
     <meta property="og:url" content="{{ request()->fullUrl() }}" />
     <meta property="og:site_name" content="Phincon Academy" />
 @endpush

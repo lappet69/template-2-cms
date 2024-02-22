@@ -30,6 +30,7 @@
                                 <th>Course</th>
                                 <th>Program</th>
                                 <th>Konten Anak</th>
+                                <th>Views</th>
                                 <th>Active</th>
                                 <th class="no-sort"></th>
                             </tr>
@@ -84,6 +85,10 @@
                     {
                         data: 'child_content',
                         name: 'child_content'
+                    },
+                    {
+                        data: 'counter',
+                        name: 'counter'
                     },
                     {
                         data: 'active',
