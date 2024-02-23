@@ -132,14 +132,30 @@
                             @endif
                         </div>
 
+                        <div class="form-group">
+                            <label for="author" class="col-sm-12 col-form-label">Penulis <span
+                                    class="text-red">*</span></label>
+                            <div class="col-sm-12">
+                                <input type="text" name="author" id="author" class="form-control"
+                                    placeholder="Penulis" value="{{ $model->exists ? $model->author : old('author') }}">
+                                @error('author')
+                                    <small class="text-red">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
+
 
                         <div class="form-group">
                             <label for="active" class="col-sm-12 col-form-label">Active <span
                                     class="text-red">*</span></label>
                             <select name="active" id="active" class="form-control">
-                                <option value="1" {{ $model->exists ? ($model->active == 1 ? 'selected' : '') : '' }}>
+                                <option value="1"
+                                    {{ $model->exists ? ($model->active == 1 ? 'selected' : '') : '' }}>
                                     Ya</option>
-                                <option value="0" {{ $model->exists ? ($model->active == 0 ? 'selected' : '') : '' }}>
+                                <option value="0"
+                                    {{ $model->exists ? ($model->active == 0 ? 'selected' : '') : '' }}>
                                     Tidak</option>
                             </select>
                         </div>

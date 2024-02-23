@@ -32,6 +32,7 @@
                                 <th>Foto</th>
                                 <th>Slug</th>
                                 <th>Views</th>
+                                <th>Penulis</th>
                                 <th>Aktif</th>
                                 <th class="no-sort"></th>
                             </tr>
@@ -94,6 +95,10 @@
                     {
                         data: 'counter',
                         name: 'counter'
+                    },
+                    {
+                        data: 'author',
+                        name: 'author'
                     },
                     {
                         data: 'active',

@@ -7,7 +7,7 @@
     <meta property="og:description" content="{{ $artikel->short_description }}" />
     <meta property="article:published_time" content="{{ $artikel->created_at }}">
     <meta property="article:modified_time" content="{{ $artikel->updated_at }}">
-    <meta name="author" content="{{ $artikel->created_by }}">
+    <meta name="author" content="{{ $artikel->author }}">
     <meta property="og:url" content="{{ request()->fullUrl() }}" />
     <meta property="og:site_name" content="Phincon Academy" />
 @endpush
@@ -44,10 +44,12 @@
                 <h2 class="text-white head-title-article">{{ $artikel->title }}
                     <i class="ms-2 mb-0 my-auto bi bi-arrow-right-circle"></i>
                 </h2>
-                <p class="text-white desc-title-article">{{ $artikel->subtitle }}</p>
+                {{-- <div></div> --}}
+                <p class="text-white desc-title-article">
+                    {{ $artikel->subtitle }}</p>
             </div>
-            <p class="mb-3" style="font-size: 14px; letter-spacing: .3px;"> Wednesday,
-                {{ date('d-m-Y', strtotime('created_ats')) }}</p>
+            <p class="mb-3" style="font-size: 14px; letter-spacing: .3px;">
+                {{ tanggal_lengkap(date('Y-m-d', strtotime($artikel->created_at)), true) }}</p>
             {!! $artikel->content !!}
 
         </div>
@@ -70,9 +72,15 @@
                         <div class="swiper-slide">
                             <div class="other-article-item">
                                 <div class="other-article-body">
-                                    <a href="{{ route('article-details', $art->slug) }}"><img
-                                            src="{{ asset('front/assets/img/' . $thumbnail->thumbnail) }}"
-                                            class="other-article-img" alt="" /></a>
+                                    <a href="{{ route('article-details', $art->slug) }}">
+                                        <img src="{{ asset('front/assets/img/' . $thumbnail->thumbnail) }}"
+                                            class="other-article-img" alt="" />
+                                        <div class="other-article-inner">
+                                            <h4 class="text-white title-home-article-thumb">{{ $art->title }} <i
+                                                    class="ms-2 mb-0 my-auto bi bi-arrow-right-circle"></i><br>&nbsp;</h4>
+                                            <p class="text-white other-article-subtitle">{{ $art->subtitle }}</p>
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>

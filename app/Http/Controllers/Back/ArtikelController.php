@@ -52,12 +52,14 @@ class ArtikelController extends Controller
             'title' => 'required',
             'content' => 'required',
             'gambar.*'      => 'required|mimes:jpeg,bmp,png,gif,svg,pdf,jpg|max:20480',
+            'author' => 'required',
             'active' => 'required',
         ],
         [
             'title.required' => 'Judul Artikel Wajib Diisi',
             'content.required' => 'Konten Artikel Wajib Diisi',
             'gambar.required' => 'File Gambar Wajib Dilampirkan',
+            'author.required' => 'Penulis Wajib Diisi',
             'active.required' => 'Keterangan Wajib Diisi'
         ]);
 
@@ -94,6 +96,7 @@ class ArtikelController extends Controller
         $model->content = $content;
         $model->section_id = $section->id;
         $model->active = $request->active;
+        $model->author = $request->author;
         $model->save();
         
         if($request->file('gambar')) {
@@ -154,11 +157,13 @@ class ArtikelController extends Controller
         $request->validate([
             'title' => 'required',
             'content' => 'required',
+            'author' => 'required',
             'gambar.*'      => 'required|mimes:jpeg,bmp,png,gif,svg,pdf,jpg|max:20480',
         ],
         [
             'title' => 'Judul Artikel Wajib Diisi',
             'content' => 'Konten Artikel Wajib Diisi',
+            'author.required' => 'Penulis Wajib Diisi',
             'gambar.*'      => 'required|mimes:jpeg,bmp,png,gif,svg,pdf,jpg|max:20480',
         ]);
 
@@ -196,6 +201,7 @@ class ArtikelController extends Controller
         $model->content = $content;
         $model->section_id = $section->id;
         $model->active = $request->active;
+        $model->author = $request->author;
         $model->save();
 
         if($request->file('gambar')) {
