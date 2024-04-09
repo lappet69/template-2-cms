@@ -9,22 +9,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">
-                        @if ($model->exists)
-                            <i class="nav-icon fas fa-eidt"></i> Edit About
-                        @else
-                            <i class="nav-icon fas fa-plus"></i> Tambah About
-                        @endif
-                    </h1>
+                    <h1 class="m-0"><i class="nav-icon fas fa-users"></i> About</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><i class="nav-icon fas fa-boxes"></i> About</li>
-                        @if ($model->exists)
-                            <li class="breadcrumb-item active"><i class="nav-icon fas fa-edit"></i> Edit About</li>
-                        @else
-                            <li class="breadcrumb-item active"><i class="nav-icon fas fa-plus"></i> Tambah About</li>
-                        @endif
+                        <li class="breadcrumb-item"><i class="nav-icon fas fa-users"></i> About</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -62,7 +51,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="title" class="col-sm-12 col-form-label">Sub Judul Konten</label>
+                            <label for="subtitle" class="col-sm-12 col-form-label">Sub Judul Konten</label>
                             <div class="col-sm-12">
                                 <input type="text" name="subtitle" id="subtitle"
                                     class="form-control @error('subtitle') is-invalid @enderror"
@@ -104,88 +93,26 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="gambar" class="col-sm-12 col-form-label">Gambar<span class="text-red">*</span>
-                                <a href="javascript:void(0)" class="btn btn-xs btn-inventory" id="tambahGambar"><i
-                                        class="fas fa-plus"></i></a></label>
-
-                            @if ($model->exists)
-                                <div id="list_gambar">
-
-                                </div>
+                            <label for="gambar" class="col-sm-12 col-form-label">Gambar Tentang Kami</label>
+                            <div class="col-sm-12">
+                                <input type="file" name="gambar" id="gambar"
+                                    class="form-control @error('gambar') is-invalid @enderror">
+                                @error('gambar')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
 
                                 @php
-                                    $asset = \App\Models\Asset::where('content_id', $model->id)->get();
+                                    if ($model->exists) {
+                                        $asset = \App\Models\Asset::where('content_id', $model->id)->first();
+                                        echo 'Gambar saat ini: <br>';
+                                        echo '<img class="img-fluid" style="max-width: 30%;max-height: 30%" src="' .
+                                            asset('frontend/assets/img/' . $asset->thumbnail) .
+                                            '">';
+                                    }
                                 @endphp
-
-                                @foreach ($asset as $a)
-                                    <div>
-                                        <b>Keterangan Foto Saat ini : </b> {{ $a->keterangan }}<br>
-                                        <img class="img-fluid" src="{{ asset('front/assets/img/' . $a->thumbnail) }}"
-                                            alt=""><br><br>
-                                    </div>
-                                @endforeach
-                            @else
-                                <div id="list_gambar">
-
-                                </div>
-                            @endif
-                        </div>
-
-                        {{-- <div class="form-group">
-                            <label for="background_image" class="col-sm-12 col-form-label">Background Image</label>
-                            <div class="col-sm-12">
-                                <input type="file" name="background_image" id="background_image" class="form-control">
-                                @error('background_image')
-                                    <small class="text-red">
-                                        <strong>{{ $message }}</strong>
-                                    </small>
-                                @enderror
                             </div>
-
-                            @php
-                                if ($model->exists) {
-                                    echo 'Thumbnail saat ini: <br>';
-                                    echo '<img class="img-fluid" src="' . asset('front/assets/img/' . $model->background_image) . '">';
-                                }
-                            @endphp
-                        </div> --}}
-
-                        {{-- <div class="form-group">
-                            <label for="thumbnail" class="col-sm-12 col-form-label">Thumbnail <span
-                                    class="text-red">*</span></label>
-                            <div class="col-sm-12">
-                                <input type="file" name="thumbnail" id="thumbnail" class="form-control">
-                                @error('thumbnail')
-                                    <small class="text-red">
-                                        <strong>{{ $message }}</strong>
-                                    </small>
-                                @enderror
-                            </div>
-
-                            @php
-                                if ($model->exists) {
-                                    echo 'Thumbnail saat ini: <br>';
-                                    echo '<img class="img-fluid" src="' . asset('front/assets/img/' . $model->thumbnail) . '">';
-                                }
-                            @endphp
-                        </div> --}}
-
-                        <div class="form-group">
-                            <label for="active" class="col-sm-12 col-form-label">Active <span
-                                    class="text-red">*</span></label>
-                            <select name="active" id="active"
-                                class="form-control @error('active') is-invalid @enderror">
-                                <option value="1" {{ $model->exists ? ($model->active == 1 ? 'selected' : '') : '' }}>
-                                    Ya</option>
-                                <option value="0" {{ $model->exists ? ($model->active == 0 ? 'selected' : '') : '' }}>
-                                    Tidak</option>
-                            </select>
-
-                            @error('active')
-                                <small class="invalid-feedback">
-                                    <strong>{{ $message }}</strong>
-                                </small>
-                            @enderror
                         </div>
 
                         <div class="float-right">

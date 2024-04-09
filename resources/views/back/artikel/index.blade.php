@@ -21,6 +21,66 @@
 @section('content')
     <div class="row justify-content-center">
         <div class="col-md-12">
+            <div class="card ">
+                <div class="card-body">
+                    <form class="form-horizontal"
+                        action="{{ $model->exists ? route('administrator.artikel.update', base64_encode($model->id)) : route('administrator.artikel.store') }}"
+                        method="POST" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        @if ($model->exists)
+                            <input type="hidden" name="_method" value="PUT">
+                        @endif
+
+                        <div class="form-group row">
+                            <label for="title" class="col-sm-2 col-form-label">Judul Konten<span
+                                    class="text-red">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" name="title" id="title"
+                                    class="form-control @error('title') is-invalid @enderror" placeholder="Judul Konten"
+                                    value="{{ $model->exists ? $model->title : old('title') }}">
+                                @error('title')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="subtitle" class="col-sm-2 col-form-label">Sub Judul Konten</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="subtitle" id="subtitle"
+                                    class="form-control @error('subtitle') is-invalid @enderror"
+                                    placeholder="Sub Judul Konten"
+                                    value="{{ $model->exists ? $model->subtitle : old('subtitle') }}">
+                                @error('subtitle')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="short_description" class="col-sm-2 col-form-label">Deskripsi Singkat</label>
+                            <div class="col-sm-10">
+                                <textarea name="short_description" placeholder="Deskripsi Singkat"
+                                    class="form-control @error('short_description') is-invalid @enderror" rows="2">{{ $model->exists ? $model->short_description : old('short_description') }}</textarea>
+                                @error('short_description')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="float-right">
+                            <button type="submit" id="save" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <table id="datatable" class="table table-sm  table-hover">
@@ -28,7 +88,7 @@
                             <tr>
                                 <th class="no-sort" style="width: 30px">No</th>
                                 <th>Judul</th>
-                                <th>Sub Judul</th>
+                                <th>Kategori</th>
                                 <th>Foto</th>
                                 <th>Slug</th>
                                 <th>Views</th>
@@ -81,8 +141,8 @@
                         name: 'title'
                     },
                     {
-                        data: 'subtitle',
-                        name: 'subtitle'
+                        data: 'kategori_id',
+                        name: 'kategori_id'
                     },
                     {
                         data: 'thumbnail',

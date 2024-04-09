@@ -8,7 +8,7 @@ class Content {
     public static function listCourse($where,$where2) {
         return DB::select("
             SELECT
-            child.id, child.title, child.active, child.counter, parent.title AS program
+            child.id, child.title, child.file, child.active, child.counter, parent.title AS program
             FROM
             contents AS child
             LEFT JOIN contents AS parent ON child.parent_content_id = parent.id
@@ -30,6 +30,18 @@ class Content {
             WHERE contents.section_id = '".$where."'
             AND assets.deleted_at IS NULL AND contents.deleted_at IS NULL
             ORDER BY assets.id ASC
+        ");
+    }
+
+    public static function listSection() {
+        return DB::select("
+            SELECT
+            sections.id, sections.name, sections.slug, s.name as parent_section
+            FROM
+            sections
+            LEFT JOIN sections s ON sections.parent_section_id = s.id
+            WHERE sections.deleted_at IS NULL
+            ORDER BY sections.name ASC
         ");
     }
 }

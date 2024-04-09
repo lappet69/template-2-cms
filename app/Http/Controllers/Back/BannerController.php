@@ -47,11 +47,11 @@ class BannerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'thumbnails.*'      => 'required|mimes:jpeg,bmp,png,gif,svg,pdf,jpg|max:20480',
+            'thumbnail'      => 'required|mimes:jpeg,bmp,png,gif,svg,pdf,jpg|max:20480',
             'active' => 'required',
         ],
         [
-            'thumbnails.required' => 'File Banner Wajib Dilampirkan',
+            'thumbnail.required' => 'File Banner Wajib Dilampirkan',
             'active.required' => 'Keterangan Wajib Diisi',
         ]);
 
@@ -83,26 +83,22 @@ class BannerController extends Controller
         $model->title = $request->title;
         $model->subtitle = $request->subtitle;
         $model->slug = $this->textToSlug($request->title);
+        $model->short_description = $request->short_description;
         $model->content = $content;
-        $model->section_id = 1;
+        $model->section_id = 10;
         $model->active = $request->active;
         $model->save();
 
-        $files = [];
-        if ($request->file('thumbnail')) {
-            foreach($request->file('thumbnail') as $key => $file)
-            {
-                $file_name = time().$file->hashName();
-                $file->move(public_path('front/assets/img'), $file_name);
+        if($request->file('thumbnail')) {
+            $file_name = time().'-'.Auth::user()->id.'-banner-'.$request->file('thumbnail')->hashName();
+            $request->file('thumbnail')->move(public_path('frontend/assets/img'), $file_name);
 
-                $asset = new Asset();
-                $asset->thumbnail = $file_name;
-                $asset->content_id = $model->id;
-                $asset->keterangan = "thumbnail";
-                $asset->save();
-            }
+            $asset = new Asset();
+            $asset->thumbnail = $file_name;
+            $asset->content_id = $model->id;
+            $asset->keterangan = "thumbnail";
+            $asset->save();
         }
-
 
         if ($model->save()) {
             return redirect()->route('administrator.banner.index')->with('alert.success', 'Banner Berhasil Tersimpan');
@@ -133,7 +129,7 @@ class BannerController extends Controller
     public function edit($id)
     {
         $id = base64_decode($id);
-        $model = Asset::find($id);
+        $model = Content::find($id);
         return view('back.banner.form', ['model' => $model]);
     }
 
@@ -178,24 +174,36 @@ class BannerController extends Controller
         
         $id = base64_decode($id);
         $model = Content::find($id);
+        $asset = Asset::where('content_id',$model->id)->first();
 
-        if($request->hasFile('img')) {
-            if(file_exists(public_path('front/assets/img/'.$model->thumbnail))) {
-                unlink(public_path('front/assets/img/'.$model->thumbnail));
+        if($request->file('thumbnail')) {
+            $fileName = time().'-'.Auth::user()->id.'-banner-.'.$request->file('thumbnail')->hashName();
+            $request->file('thumbnail')->move(public_path('frontend/assets/img'), $fileName);
+
+            if($asset) {
+                if(file_exists(public_path('frontend/assets/img/'.$asset->thumbnail))) {
+                    unlink(public_path('frontend/assets/img/'.$asset->thumbnail));
+                }
+
+                $asset_model = Asset::find($asset->id);
+                $asset_model->thumbnail = $fileName;
+                $asset_model->content_id = $model->id;
+                $asset_model->save();
+            } else {
+                $asset_model = new Asset();
+                $asset_model->thumbnail = $fileName;
+                $asset_model->content_id = $model->id;
+                $asset->keterangan = "thumbnail";
+                $asset_model->save();
             }
-
-            $time = time();
-            $fileName = $time.'-'.Auth::user()->id.'-banner.'.$request->img->extension();
-
-            $request->img->move(public_path('front/assets/img'), $fileName);
-            $model->thumbnail = $fileName;
         }
 
         $model->title = $request->title;
         $model->subtitle = $request->subtitle;
         $model->slug = $this->textToSlug($request->title);
+        $model->short_description = $request->short_description;
         $model->content = $content;
-        $model->section_id = 1;
+        $model->section_id = 10;
         $model->active = $request->active;
         $model->save();
 
@@ -215,10 +223,19 @@ class BannerController extends Controller
     public function destroy($id)
     {
         $id = base64_decode($id);
-        $model = Asset::find($id);
-        if(file_exists(public_path('front/assets/img/'.$model->thumbnail))) {
-            unlink(public_path('front/assets/img/'.$model->thumbnail));
+        $model = Content::find($id);
+        $asset = Asset::where('content_id',$model->id)->first();
+        if($asset) {
+            if(file_exists(public_path('frontend/assets/img/'.$asset->thumbnail))) {
+                unlink(public_path('frontend/assets/img/'.$asset->thumbnail));
+            }
+
+            $asset_model = Asset::find($asset->id);
+            $asset_model->deleted_at = date('Y-m-d H:i:s');
+            $asset_model->deleted_by = Auth::user()->id;
+            $asset_model->save();
         }
+
         $model->deleted_at = date('Y-m-d H:i:s');
         $model->deleted_by = Auth::user()->id;
         $model->save();
@@ -226,17 +243,22 @@ class BannerController extends Controller
 
     public function datatable(Request $request)
     {
-        $query = Asset::leftJoin('contents as c','c.id','=','assets.content_id')->where('c.section_id',1)
-        ->select('assets.id','assets.thumbnail','c.title')->orderBy('assets.id','asc');
+        $query = Content::leftJoin('assets as a','a.content_id','=','contents.id')
+                    ->select('a.thumbnail','contents.id','contents.title','contents.subtitle','contents.short_description','contents.content')
+                    ->where('contents.section_id',10)
+                    ->orderBy('contents.id','desc');
         return DataTables::of($query)
-            // ->editColumn('thumbnail', function($model) {
-            //     $string = '<a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#showBanner" title="Lihat Banner">'.$model->thumbnail.'</a>';
-            //     return $string;
-            // })
+            ->editColumn('thumbnail', function($model) {
+                $thumbnail = '';
+                if($model->thumbnail) {
+                    $thumbnail = '<img src="'.asset('frontend/assets/img/'.$model->thumbnail).'" width="200px" height="75px">';
+                }
+                return $thumbnail;
+            })
             ->addColumn('action', function ($model) {
                 $string = '<div class="btn-group">';
-                // $string .= '<a href="' . route('administrator.banner.edit', ['id' => base64_encode($model->id)]) . '" type="button"  class="btn btn-sm btn-info" title="Edit Banner"><i class="fas fa-edit"></i></a>';
-                $string .= '&nbsp;&nbsp;<a href="' . route('administrator.banner.destroy', ['id' => base64_encode($model->id)]) . '" type="button" class="btn btn-sm btn-danger btn-delete" title="Hapus Asset Banner"><i class="fa fa-trash"></i></a>';
+                $string .= '<a href="' . route('administrator.banner.edit', ['id' => base64_encode($model->id)]) . '" type="button"  class="btn btn-sm btn-info" title="Edit Banner"><i class="fas fa-edit"></i></a>';
+                $string .= '&nbsp;&nbsp;<a href="' . route('administrator.banner.destroy', ['id' => base64_encode($model->id)]) . '" type="button" class="btn btn-sm btn-danger btn-delete" title="Hapus Banner"><i class="fa fa-trash"></i></a>';
                 $string .= '</div>';
                 return $string;
             })

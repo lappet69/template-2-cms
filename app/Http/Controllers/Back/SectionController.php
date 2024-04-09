@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
 use App\Models\Section;
+use App\Services\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -141,9 +142,7 @@ class SectionController extends Controller
 
     public function datatable(Request $request)
     {
-        $query = Section::leftJoin('sections as s','sections.parent_section_id','=','s.id')
-        ->select('sections.id','sections.name','sections.slug','s.name as parent_section')->orderBy('sections.name','asc');
-
+        $query = Content::listSection();
         return DataTables::of($query)
             ->addColumn('action', function ($model) {
                 $string = '<div class="btn-group">';

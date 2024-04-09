@@ -18,20 +18,20 @@
         rel="stylesheet" />
 
     <!-- Vendor CSS Files -->
-    <link href="{{ asset('front/assets/vendor/animate.css/animate.min.css') }}" rel="stylesheet" />
+    {{-- <link href="{{ asset('front/assets/vendor/animate.css/animate.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('front/assets/vendor/aos/aos.css') }}" rel="stylesheet" />
     <link href="{{ asset('front/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('front/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('front/assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('front/assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet" />
-    <link href="{{ asset('front/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('front/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet" /> --}}
 
     <!-- Template Main CSS Files -->
     <link href="{{ asset('front/assets/css/variables.css') }}" rel="stylesheet" />
 
     <!-- Template Main CSS File -->
-    <link href="{{ asset('front/assets/css/style.css') }}" rel="stylesheet" />
-    <link href="{{ asset('front/assets/css/mobile-styles.css') }}" rel="stylesheet" />
+    {{-- <link href="{{ asset('front/assets/css/style.css') }}" rel="stylesheet" />
+    <link href="{{ asset('front/assets/css/mobile-styles.css') }}" rel="stylesheet" /> --}}
 
     <meta content="" name="keywords" />
 
@@ -50,7 +50,7 @@
         $identitas = \App\Models\Identitas::where('active', '1')->limit(1)->first();
     @endphp
 
-    @include('layouts.navbar_front')
+    {{-- @include('layouts.navbar_front') --}}
 
     <main id="main">
         @yield('content')

@@ -1,6 +1,6 @@
 :root {
-    --primary: #00afa0;
-    --hover: #85d7cf;
+    --primary: #b49c73;
+    --hover: #a78a5a;
 }
 .brand-link {
     border-bottom: 1px solid #dee2e6;
@@ -190,4 +190,9 @@
     border: 1px solid #ced4da;
     border-radius: 10px;
     width: 100%;
+}
+
+.login-box-msg {
+    width: 250px;
+    height: 250px;
 }

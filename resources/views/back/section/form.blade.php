@@ -66,6 +66,7 @@
                                     class="text-red">*</span></label>
                             <div class="col-sm-12">
                                 <select name="parent_section_id" id="parent_section_id" class="form-control select2bs4">
+                                    <option value="">-Tidak Ada-</option>
                                     @foreach ($parent_section as $p)
                                         <option value="{{ $p->id }}"
                                             {{ $model->exists ? ($model->parent_section_id == $p->id ? 'selected' : '') : '' }}>

@@ -17,7 +17,7 @@
 
 
     <!-- ======= Hero Slider Section ======= -->
-    <div class="container-academy">
+    <div class="container">
         @if (count($banner) > 1)
             <section id="hero-slider" class="swiper swiper-banner">
                 <div class="swiper-wrapper" data-aos="fade-in">
@@ -32,21 +32,58 @@
                 {{-- <div class="swiper-button-prev"></div> --}}
                 {{-- <div class="swiper-button-next"></div> --}}
             </section>
-        @else
+        @elseif(count($banner) == 1)
             <section id="hero-slider" class="hero-slider">
-                <div class="container-academy" data-aos="fade-in">
+                <div class="container" data-aos="fade-in">
                     <div class="hero-slider-card">
                         <img src="{{ asset('front/assets/img/' . $banner[0]->thumbnail) }}" class="img-fluid"
                             alt="" />
+                        <div class="hero-slider-inner">
+                            <h1>
+                                {{ $banner[0]->title }}
+                            </h1>
+                            <h4>{{ $banner[0]->subtitle }}</h4>
+                            <div class="d-inline">
+                                <button class="btn btn-primary mr-5">Konsultasi Via WhatsApp</button>
+                                <button class="btn btn-outline-primary ml-5">Layanan Kami</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        @else
+            <section id="hero-slider" class="hero-slider">
+                <div class="container" data-aos="fade-in">
+                    <div class="hero-slider-card">
+                        <img src="#" class="img-fluid" width="100%" height="350px" alt="" />
                     </div>
                 </div>
             </section>
         @endif
     </div>
-
     <!-- End Hero Slider Section -->
 
-    <!-- ======= Article Slider Section ======= -->
+    <!-- ======= Why Section ======= -->
+    <section id="why" class="why">
+        <div class="container" data-aos="fade-up">
+            <div class="section-title">
+                <h2>Bagaimana Menggunakan Jasa Kami</h2>
+            </div>
+            <div class="row">
+                @foreach ($how as $how)
+                    <div class="col-12 col-sm-6 col-lg-3 mb-3">
+                        <div class="img-bg-why-inner">
+                            <h3 class="title-why mb-3">{{ $how->title }}</h3>
+                            <p class="desc-why">{{ $how->short_description }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    <!-- End Why Section -->
+
+    {{-- <!-- ======= Article Slider Section ======= -->
     <section id="article-slider" class="article-slider">
         <div class="container-academy" data-aos="fade-in">
             <div class="row">
@@ -72,10 +109,10 @@
             </div>
         </div>
     </section>
-    <!-- End Article Slider Section -->
+    <!-- End Article Slider Section --> --}}
 
     <!-- ======= Courses Section ======= -->
-    <section id="popular-courses" class="courses">
+    {{-- <section id="popular-courses" class="courses">
         <div class="container-academy" data-aos="fade-up">
             <div class="section-title">
                 <h2>Program</h2>
@@ -119,38 +156,8 @@
                 @endforeach
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- End Courses Section -->
-
-    <!-- ======= Why Section ======= -->
-    <section id="why" class="why">
-        <div class="container-academy" data-aos="fade-up">
-            <div class="section-title">
-                <h2>Kenapa Memilih Bootcamp<br>di Phincon Academy</h2>
-            </div>
-
-            <div class="row">
-                @foreach ($why_bootcamp_phincon as $why)
-                    @php
-                        $thumbnail = \App\Models\Asset::where('content_id', $why->id)
-                            ->where('keterangan', 'thumbnail')
-                            ->first();
-                    @endphp
-                    <div class="col-12 col-sm-6 col-lg-4 mb-3">
-                        <a href="javascript:void(0)">
-                            <img src="{{ asset('front/assets/img/' . $thumbnail->thumbnail) }}" alt=""
-                                class="img-bg-why d-flex align-items-end w-100">
-                            <div class="img-bg-why-inner">
-                                <h3 class="title-why mb-3">{{ $why->title }}</h3>
-                                <p class="desc-why">{{ $why->short_description }}</p>
-                            </div>
-                        </a>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-    <!-- End Why Section -->
 
     <!-- ======= Clients Section ======= -->
     <section id="clients" class="clients section-bg">
@@ -198,8 +205,8 @@
                         <div class="swiper-slide">
                             <div class="testimonial-item">
                                 <div class="testimonial-content">
-                                    <img src="{{ asset('front/assets/img/' . $testi->thumbnail) }}"
-                                        class="testimonial-img" alt="" />
+                                    <img src="{{ asset('front/assets/img/' . $testi->thumbnail) }}" class="testimonial-img"
+                                        alt="" />
                                     <p>{{ $testi->short_description }}</p>
                                     <div class="testimonial-profile">
                                         <h3>{{ $testi->title }}</h3>

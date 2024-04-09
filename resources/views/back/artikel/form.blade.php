@@ -2,6 +2,9 @@
 @push('css')
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('back/adminlte/plugins/summernote/summernote-bs4.min.css') }}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('back/adminlte/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('back/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 @endpush
 @section('content-header')
     <!-- Content Header (Page header) -->
@@ -45,10 +48,12 @@
                         @if ($model->exists)
                             <input type="hidden" name="_method" value="PUT">
                         @endif
-                        <div class="form-group">
-                            <label for="title" class="col-sm-12 col-form-label">Judul Artikel <span
+                        <div class="form-group row">
+                            <label for="title" class="col-sm-2 col-form-label">Judul Artikel <span
                                     class="text-red">*</span></label>
-                            <div class="col-sm-12">
+                            <div class="col-sm-10">
+                                <input type="hidden" name="parent_content_id"
+                                    value="{{ base64_encode($parent_content->id) }}">
                                 <input type="text" name="title" id="title" class="form-control"
                                     placeholder="Judul Artikel" value="{{ $model->exists ? $model->title : old('title') }}">
                                 @error('title')
@@ -59,9 +64,9 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="subtitle" class="col-sm-12 col-form-label">Sub Judul Artikel</label>
-                            <div class="col-sm-12">
+                        <div class="form-group row">
+                            <label for="subtitle" class="col-sm-2 col-form-label">Sub Judul Artikel</label>
+                            <div class="col-sm-10">
                                 <textarea name="subtitle" rows="5" class="form-control" placeholder="Sub Judul Artikel">{{ $model->exists ? $model->subtitle : old('subtitle') }}</textarea>
                                 @error('subtitle')
                                     <small class="text-red">
@@ -71,11 +76,19 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="short_description" class="col-sm-12 col-form-label">Deskripsi Singkat</label>
-                            <div class="col-sm-12">
-                                <textarea name="short_description" rows="5" class="form-control">{{ $model->exists ? $model->short_description : old('short_description') }}</textarea>
-                                @error('short_description')
+                        <div class="form-group row">
+                            <label for="kategori_id" class="col-sm-2 col-form-label">Kategori <span
+                                    class="text-red">*</span></label>
+                            <div class="col-sm-10">
+                                <select name="kategori_id" class="form-control col-4 select2bs4">
+                                    @foreach ($kategori as $kat)
+                                        <option value="{{ $kat->id }}"
+                                            {{ $kat->id == $model->kategori_id ? 'selected' : '' }}>
+                                            {{ $kat->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('kategori_id')
                                     <small class="text-red">
                                         <strong>{{ $message }}</strong>
                                     </small>
@@ -83,10 +96,23 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="content" class="col-sm-12 col-form-label">Konten <span
+                        <div class="form-group row">
+                            <label for="short_description" class="col-sm-2 col-form-label">Deskripsi Singkat</label>
+                            <div class="col-sm-10">
+                                <textarea name="short_description" rows="5" class="form-control @error('short_description') is-invalid @enderror"
+                                    placeholder="Deskripsi Singkat">{{ $model->exists ? $model->short_description : old('short_description') }}</textarea>
+                                @error('short_description')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="content" class="col-sm-2 col-form-label">Konten <span
                                     class="text-red">*</span></label>
-                            <div class="col-sm-12">
+                            <div class="col-sm-10">
                                 <textarea name="content" class="summernote" rows="5">
                                     {{ $model->exists ? $model->content : old('content') }}
                                 </textarea>
@@ -98,44 +124,35 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="gambar" class="col-sm-12 col-form-label">Gambar<span class="text-red">*</span>
-                                <a href="javascript:void(0)" class="btn btn-xs btn-inventory" id="tambahGambar"><i
-                                        class="fas fa-plus"></i></a></label>
-
-                            @if ($model->exists)
-                                <div id="list_gambar">
-
-                                </div>
+                        <div class="form-group row">
+                            <label for="gambar" class="col-sm-2 col-form-label">Gambar / Foto / Thumbnail Artikel</label>
+                            <div class="col-sm-10">
+                                <input type="file" name="gambar" id="gambar"
+                                    class="form-control @error('gambar') is-invalid @enderror">
+                                @error('gambar')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
 
                                 @php
-                                    $asset = \App\Models\Asset::where('content_id', $model->id)->get();
+                                    if ($model->exists) {
+                                        $asset = \App\Models\Asset::where('content_id', $model->id)->first();
+                                        if ($asset) {
+                                            echo 'Gambar saat ini: <br>';
+                                            echo '<img class="img-fluid" src="' .
+                                                asset('frontend/assets/img/' . $asset->thumbnail) .
+                                                '">';
+                                        }
+                                    }
                                 @endphp
-
-                                @if (count($asset) > 0)
-                                    @foreach ($asset as $a)
-                                        <div>
-                                            <b>Keterangan Foto Saat ini : </b> {{ $a->keterangan }}<br>
-                                            <img class="img-fluid" src="{{ asset('front/assets/img/' . $a->thumbnail) }}"
-                                                alt="">
-                                            <a href="{{ route('administrator.asset.destroy', ['id' => base64_encode($a->id)]) }}"
-                                                class="btn btn-sm btn-danger btn-delete" title="Hapus Asset"><i
-                                                    class="fa fa-trash"></i></a>
-                                            <br><br>
-                                        </div>
-                                    @endforeach
-                                @endif
-                            @else
-                                <div id="list_gambar">
-
-                                </div>
-                            @endif
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="author" class="col-sm-12 col-form-label">Penulis <span
+                        {{-- <div class="form-group row">
+                            <label for="author" class="col-sm-2 col-form-label">Penulis <span
                                     class="text-red">*</span></label>
-                            <div class="col-sm-12">
+                            <div class="col-sm-10">
                                 <input type="text" name="author" id="author" class="form-control"
                                     placeholder="Penulis" value="{{ $model->exists ? $model->author : old('author') }}">
                                 @error('author')
@@ -144,20 +161,22 @@
                                     </small>
                                 @enderror
                             </div>
-                        </div>
+                        </div> --}}
 
 
-                        <div class="form-group">
-                            <label for="active" class="col-sm-12 col-form-label">Active <span
+                        <div class="form-group row">
+                            <label for="active" class="col-sm-2 col-form-label">Active <span
                                     class="text-red">*</span></label>
-                            <select name="active" id="active" class="form-control">
-                                <option value="1"
-                                    {{ $model->exists ? ($model->active == 1 ? 'selected' : '') : '' }}>
-                                    Ya</option>
-                                <option value="0"
-                                    {{ $model->exists ? ($model->active == 0 ? 'selected' : '') : '' }}>
-                                    Tidak</option>
-                            </select>
+                            <div class="col-sm-10">
+                                <select name="active" id="active" class="form-control">
+                                    <option value="1"
+                                        {{ $model->exists ? ($model->active == 1 ? 'selected' : '') : '' }}>
+                                        Ya</option>
+                                    <option value="0"
+                                        {{ $model->exists ? ($model->active == 0 ? 'selected' : '') : '' }}>
+                                        Tidak</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="float-right">
@@ -171,6 +190,8 @@
 @endsection
 
 @push('scripts')
+    <!-- Select2 -->
+    <script src="{{ asset('back/adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
     <!-- Summernote -->
     <script src="{{ asset('back/adminlte/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <script>
@@ -182,6 +203,10 @@
         $(function() {
             // Summernote
             $('.summernote').summernote()
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
 
             $("#tambahGambar").click(function(e) {
                 e.preventDefault();

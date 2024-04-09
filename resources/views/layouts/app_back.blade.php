@@ -9,12 +9,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}{{ isset($title) ? ' | ' . $title : '' }}</title>
 
-
-    <!-- //warehouse
-//uom
-/vendor -->
-
-
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -37,7 +31,6 @@
 
     <!-- Daterange Picker -->
     <link rel="stylesheet" href="{{ asset('back/adminlte/plugins/daterangepicker/daterangepicker.css') }}">
-
 
     @stack('css')
 
@@ -96,6 +89,10 @@
 </head>
 
 <body class="hold-transition layout-fixed text-sm {{ isset($collapse) ? 'sidebar-collapse' : '' }}">
+    @php
+        $identitas = \App\Models\Content::where('active', 1)->where('section_id', 1)->limit(1)->first();
+        $content = json_decode($identitas->content);
+    @endphp
     <div class="wrapper">
 
         <!-- Preloader -->
@@ -166,8 +163,12 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-light-inventory elevation-4">
             <!-- Brand Logo -->
-            <a href="#" class="brand-link">
-                <img src="{{ asset('front/assets/img/academy-logo.png') }}" alt="Logo" class="brand-image">
+            <a href="{{ route('administrator.home') }}" class="brand-link">
+                @if ($identitas->exists)
+                    <img src="{{ asset('frontend/assets/img/' . $content->logo) }}" alt="Logo" class="brand-image">
+                @else
+                    Logo Law Firm
+                @endif
             </a>
 
             <!-- Sidebar -->
@@ -183,7 +184,8 @@
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview"
                         role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="/home" class="nav-link @if ($segments[0] == 'home') active @endif">
+                            <a href="{{ route('administrator.home') }}"
+                                class="nav-link @if ($segments[1] == 'home') active @endif">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -191,18 +193,15 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('administrator.identitas.index') }}"
-                                class="nav-link @if ($segments[1] == 'identitas') active @endif">
+                            <a href="{{ route('administrator.pengunjung-website.index') }}"
+                                class="nav-link @if ($segments[1] == 'pengunjung-website') active @endif">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Identitas
-                                </p>
+                                <p>Pengunjung Website</p>
                             </a>
                         </li>
-
                         @foreach ($section as $s)
                             <li class="nav-item">
-                                <a href="/administrator/{{ $s->slug }}"
+                                <a href="{{ route('administrator.index') }}/{{ $s->slug }}"
                                     class="nav-link @if ($segments[1] == '{{ $s->slug }}') active @endif">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
                                     <p>{{ $s->name }}</p>

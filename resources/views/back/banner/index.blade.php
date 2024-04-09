@@ -27,8 +27,10 @@
                         <thead>
                             <tr>
                                 <th class="no-sort" style="width: 30px">No</th>
+                                <th>Judul</th>
+                                <th>Sub Judul</th>
+                                <th>Deskripsi Singkat</th>
                                 <th>Banner</th>
-                                <th>Title</th>
                                 <th class="no-sort" style="width: 100px"></th>
                             </tr>
                         </thead>
@@ -72,12 +74,20 @@
                         name: 'id'
                     },
                     {
-                        data: 'thumbnail',
-                        name: 'thumbnail'
-                    },
-                    {
                         data: 'title',
                         name: 'title'
+                    },
+                    {
+                        data: 'subtitle',
+                        name: 'subtitle'
+                    },
+                    {
+                        data: 'short_description',
+                        name: 'short_description'
+                    },
+                    {
+                        data: 'thumbnail',
+                        name: 'thumbnail'
                     },
                     {
                         data: 'action',

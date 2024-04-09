@@ -9,22 +9,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">
-                        @if ($model->exists)
-                            <i class="nav-icon fas fa-eidt"></i> Edit Identitas
-                        @else
-                            <i class="nav-icon fas fa-plus"></i> Tambah Identitas
-                        @endif
-                    </h1>
+                    <h1 class="m-0"><i class="nav-icon fas fa-boxes"></i> Identitas</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><i class="nav-icon fas fa-boxes"></i> Identitas</li>
-                        @if ($model->exists)
-                            <li class="breadcrumb-item active"><i class="nav-icon fas fa-edit"></i> Edit Identitas</li>
-                        @else
-                            <li class="breadcrumb-item active"><i class="nav-icon fas fa-plus"></i> Tambah Identitas</li>
-                        @endif
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -52,7 +41,7 @@
                                 <input type="text" name="nama_website" id="nama_website"
                                     class="form-control @error('nama_website') is-invalid @enderror"
                                     placeholder="Nama Website"
-                                    value="{{ $model->exists ? $model->nama_website : old('nama_website') }}">
+                                    value="{{ $model->exists ? $content->nama_website : old('nama_website') }}">
                                 @error('nama_website')
                                     <small class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
@@ -62,54 +51,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="nama_gedung" class="col-sm-12 col-form-label">Nama Gedung</label>
+                            <label for="slogan" class="col-sm-12 col-form-label">Slogan</label>
                             <div class="col-sm-12">
-                                <input type="text" name="nama_gedung" id="nama_gedung"
-                                    class="form-control @error('nama_gedung') is-invalid @enderror"
-                                    placeholder="Nama Gedung"
-                                    value="{{ $model->exists ? $model->nama_gedung : old('nama_gedung') }}">
-                                @error('nama_gedung')
-                                    <small class="invalid-feedback">
-                                        <strong>{{ $message }}</strong>
-                                    </small>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="alamat_kantor" class="col-sm-12 col-form-label">Alamat Kantor</label>
-                            <div class="col-sm-12">
-                                <textarea name="alamat_kantor" class="form-control @error('alamat_kantor') is-invalid @enderror"
-                                    placeholder="Alamat Kantor" rows="5">{{ $model->exists ? $model->alamat_kantor : old('alamat_kantor') }}</textarea>
-                                @error('alamat_kantor')
-                                    <small class="invalid-feedback">
-                                        <strong>{{ $message }}</strong>
-                                    </small>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="no_telp" class="col-sm-12 col-form-label">No. Telp</label>
-                            <div class="col-sm-12">
-                                <input type="text" name="no_telp" id="no_telp"
-                                    class="form-control @error('no_telp') is-invalid @enderror" placeholder="No. Telp"
-                                    value="{{ $model->exists ? $model->no_telp : old('no_telp') }}">
-                                @error('no_telp')
-                                    <small class="invalid-feedback">
-                                        <strong>{{ $message }}</strong>
-                                    </small>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="no_wa" class="col-sm-12 col-form-label">No. WA</label>
-                            <div class="col-sm-12">
-                                <input type="text" name="no_wa" id="no_wa"
-                                    class="form-control @error('no_wa') is-invalid @enderror" placeholder="No. WA"
-                                    value="{{ $model->exists ? $model->no_wa : old('no_wa') }}">
-                                @error('no_wa')
+                                <input type="text" name="slogan" id="slogan"
+                                    class="form-control @error('slogan') is-invalid @enderror"
+                                    placeholder="Slogan / Tagline (Jika Ada)"
+                                    value="{{ $model->exists ? $content->slogan : old('slogan') }}">
+                                @error('slogan')
                                     <small class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
                                     </small>
@@ -122,7 +70,7 @@
                             <div class="col-sm-12">
                                 <input type="text" name="email" id="email"
                                     class="form-control @error('email') is-invalid @enderror" placeholder="Email"
-                                    value="{{ $model->exists ? $model->email : old('email') }}">
+                                    value="{{ $model->exists ? $content->email : old('email') }}">
                                 @error('email')
                                     <small class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
@@ -132,12 +80,55 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="img_address_1" class="col-sm-12 col-form-label">Gambar Lokasi Bootcamp 1<span
+                            <label for="no_telp" class="col-sm-12 col-form-label">No. Telp</label>
+                            <div class="col-sm-12">
+                                <input type="text" name="no_telp" id="no_telp"
+                                    class="form-control @error('no_telp') is-invalid @enderror"
+                                    placeholder="Misal : +021xxx"
+                                    value="{{ $model->exists ? $content->no_telp : old('no_telp') }}">
+                                @error('no_telp')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="no_wa" class="col-sm-12 col-form-label">No. WA</label>
+                            <div class="col-sm-12">
+                                <input type="text" name="no_wa" id="no_wa"
+                                    class="form-control @error('no_wa') is-invalid @enderror"
+                                    placeholder="Misal : 62813xxxxx"
+                                    value="{{ $model->exists ? $content->no_wa : old('no_wa') }}">
+                                @error('no_wa')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="alamat_kantor" class="col-sm-12 col-form-label">Alamat Kantor</label>
+                            <div class="col-sm-12">
+                                <textarea name="alamat_kantor" class="form-control @error('alamat_kantor') is-invalid @enderror"
+                                    placeholder="Alamat Kantor" rows="5">{{ $model->exists ? $content->alamat_kantor : old('alamat_kantor') }}</textarea>
+                                @error('alamat_kantor')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="logo" class="col-sm-12 col-form-label">Logo Institusi<span
                                     class="text-red">*</span></label>
                             <div class="col-sm-12">
-                                <input type="file" name="img_address_1" id="img_address_1"
-                                    class="form-control @error('img_address_1') is-invalid @enderror">
-                                @error('img_address_1')
+                                <input type="file" name="logo" id="logo"
+                                    class="form-control @error('logo') is-invalid @enderror">
+                                @error('logo')
                                     <small class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
                                     </small>
@@ -145,52 +136,26 @@
 
                                 @php
                                     if ($model->exists) {
-                                        echo 'Thumbnail saat ini: <br>';
-                                        echo '<img class="img-fluid" src="' . asset('front/assets/img/' . $model->img_address_1) . '">';
+                                        echo 'Logo saat ini: <br>';
+                                        echo '<img class="img-fluid" style="max-width: 30%;max-height: 30%" src="' .
+                                            asset('frontend/assets/img/' . $content->logo) .
+                                            '">';
                                     }
                                 @endphp
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="img_address_2" class="col-sm-12 col-form-label">Gambar Lokasi Bootcamp 2<span
-                                    class="text-red">*</span></label>
+                            <label for="short_description" class="col-sm-12 col-form-label">Deskripsi Singkat</label>
                             <div class="col-sm-12">
-                                <input type="file" name="img_address_2" id="img_address_2"
-                                    class="form-control @error('img_address_2') is-invalid @enderror">
-                                @error('img_address_2')
+                                <textarea name="short_description" rows="5"
+                                    class="form-control @error('short_description') is-invalid @enderror"
+                                    placeholder="Misalnya : Gomez and Martines Law Firm and Partners adalah....">{{ $model->exists ? $model->short_description : old('short_description') }}</textarea>
+                                @error('short_description')
                                     <small class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
                                     </small>
                                 @enderror
-
-                                @php
-                                    if ($model->exists) {
-                                        echo 'Thumbnail saat ini: <br>';
-                                        echo '<img class="img-fluid" src="' . asset('front/assets/img/' . $model->img_address_2) . '">';
-                                    }
-                                @endphp
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="img_address_3" class="col-sm-12 col-form-label">Gambar Lokasi Bootcamp 3<span
-                                    class="text-red">*</span></label>
-                            <div class="col-sm-12">
-                                <input type="file" name="img_address_3" id="img_address_3"
-                                    class="form-control @error('img_address_3') is-invalid @enderror">
-                                @error('img_address_3')
-                                    <small class="invalid-feedback">
-                                        <strong>{{ $message }}</strong>
-                                    </small>
-                                @enderror
-
-                                @php
-                                    if ($model->exists) {
-                                        echo 'Thumbnail saat ini: <br>';
-                                        echo '<img class="img-fluid" src="' . asset('front/assets/img/' . $model->img_address_3) . '">';
-                                    }
-                                @endphp
                             </div>
                         </div>
 
@@ -199,8 +164,36 @@
                             <div class="col-sm-12">
                                 <input type="text" name="facebook" id="facebook"
                                     class="form-control @error('facebook') is-invalid @enderror" placeholder="Facebook"
-                                    value="{{ $model->exists ? $model->facebook : old('facebook') }}">
+                                    value="{{ $model->exists ? $content->facebook : old('facebook') }}">
                                 @error('facebook')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="twitter" class="col-sm-12 col-form-label">Twitter</label>
+                            <div class="col-sm-12">
+                                <input type="text" name="twitter" id="twitter"
+                                    class="form-control @error('twitter') is-invalid @enderror" placeholder="Twitter"
+                                    value="{{ $model->exists ? $content->twitter : old('twitter') }}">
+                                @error('twitter')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="youtube" class="col-sm-12 col-form-label">Youtube</label>
+                            <div class="col-sm-12">
+                                <input type="text" name="youtube" id="youtube"
+                                    class="form-control @error('youtube') is-invalid @enderror" placeholder="Youtube"
+                                    value="{{ $model->exists ? $content->youtube : old('youtube') }}">
+                                @error('youtube')
                                     <small class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
                                     </small>
@@ -213,7 +206,7 @@
                             <div class="col-sm-12">
                                 <input type="text" name="instagram" id="instagram"
                                     class="form-control @error('instagram') is-invalid @enderror" placeholder="Instagram"
-                                    value="{{ $model->exists ? $model->instagram : old('instagram') }}">
+                                    value="{{ $model->exists ? $content->instagram : old('instagram') }}">
                                 @error('instagram')
                                     <small class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
@@ -227,7 +220,7 @@
                             <div class="col-sm-12">
                                 <input type="text" name="linkedin" id="linkedin"
                                     class="form-control @error('linkedin') is-invalid @enderror" placeholder="Linkedin"
-                                    value="{{ $model->exists ? $model->linkedin : old('linkedin') }}">
+                                    value="{{ $model->exists ? $content->linkedin : old('linkedin') }}">
                                 @error('linkedin')
                                     <small class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
@@ -237,23 +230,31 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="active" class="col-sm-12 col-form-label">Active <span
-                                    class="text-red">*</span></label>
-                            <select name="active" id="active"
-                                class="form-control @error('active') is-invalid @enderror">
-                                <option value="1"
-                                    {{ $model->exists ? ($model->active == 1 ? 'selected' : '') : (old('active') == 1 ? 'selected' : '') }}>
-                                    Ya</option>
-                                <option value="0"
-                                    {{ $model->exists ? ($model->active == 0 ? 'selected' : '') : (old('active') == 0 ? 'selected' : '') }}>
-                                    Tidak</option>
-                            </select>
+                            <label for="meta_title" class="col-sm-12 col-form-label">Meta Title</label>
+                            <div class="col-sm-12">
+                                <input type="text" name="meta_title" id="meta_title"
+                                    class="form-control @error('meta_title') is-invalid @enderror"
+                                    placeholder="Meta Title"
+                                    value="{{ $model->exists ? $content->meta_title : old('meta_title') }}">
+                                @error('meta_title')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
 
-                            @error('active')
-                                <small class="invalid-feedback">
-                                    <strong>{{ $message }}</strong>
-                                </small>
-                            @enderror
+                        <div class="form-group">
+                            <label for="meta_description" class="col-sm-12 col-form-label">Meta Description</label>
+                            <div class="col-sm-12">
+                                <textarea name="meta_description" rows="5"
+                                    class="form-control @error('meta_description') is-invalid @enderror" placeholder="Meta Description">{{ $model->exists ? $content->meta_description : old('meta_description') }}</textarea>
+                                @error('meta_description')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="float-right">

@@ -25,7 +25,16 @@ class AboutController extends Controller
      */
     public function index()
     {
-        return view('back.about.index');
+        $section = Section::where('slug', '=',request()->segment(2))->first();
+
+        $identitas = Content::where('section_id','=',$section->id)->whereNull('deleted_at')->first();
+        if($identitas) {
+            $data['model'] = Content::find($identitas->id);
+            $data['content'] = json_decode($data['model']->content);
+        } else {
+            $data['model'] = new Content();
+        }
+        return view('back.about.form', $data);
     }
 
     /**
@@ -49,13 +58,9 @@ class AboutController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'gambar.*'      => 'required|mimes:jpeg,bmp,png,gif,svg,pdf,jpg|max:20480',
-            'active' => 'required',
         ],
         [
             'title.required' => 'Judul Konten Wajib Diisi',
-            'gambar.required' => 'File Gambar Wajib Dilampirkan',
-            'active.required' => 'Keterangan Wajib Diisi',
         ]);
 
         $content = $request->content;
@@ -79,7 +84,6 @@ class AboutController extends Controller
             }
             $content = $dom->saveHTML();
         }
-        $section = Section::where('slug',request()->segment(2))->first();
 
         $model = new Content();
 
@@ -88,22 +92,19 @@ class AboutController extends Controller
         $model->slug = $this->textToSlug($request->title);
         $model->short_description = $request->short_description;
         $model->content = $content;
-        $model->section_id = $section->id;
-        $model->active = $request->active;
+        $model->section_id = 5;
+        $model->active = 1;
         $model->save();
 
         if($request->file('gambar')) {
-            foreach($request->file('gambar') as $key => $file) {
-                $time = time();
-                $fileName = $time.'-'.Auth::user()->id.'-about-'.$file->hashName();
-                $file->move(public_path('front/assets/img'), $fileName);
+            $file_name = time().'-'.Auth::user()->id.'-about-'.$request->file('gambar')->hashName();
+            $request->file('gambar')->move(public_path('frontend/assets/img'), $file_name);
 
-                $asset = new Asset();
-                $asset->thumbnail = $fileName;
-                $asset->content_id = $model->id;
-                $asset->keterangan = $request->keterangan[$key];
-                $asset->save();
-            }
+            $asset = new Asset();
+            $asset->thumbnail = $file_name;
+            $asset->content_id = $model->id;
+            $asset->keterangan = "thumbnail";
+            $asset->save();
         }
 
         if ($model->save()) {
@@ -150,11 +151,9 @@ class AboutController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'active' => 'required',
         ],
         [
             'title.required' => 'Title About Wajib Diisi',
-            'active.required' => 'Keterangan Wajib Diisi',
         ]);
 
         $content = $request->content;
@@ -178,39 +177,39 @@ class AboutController extends Controller
             }
             $content = $dom->saveHTML();
         }
-        $section = Section::where('slug',request()->segment(2))->first();
 
-        
         $id = base64_decode($id);
         $model = Content::find($id);
+        $asset = Asset::where('content_id',$model->id)->first();
+
+        if($request->file('gambar')) {
+            $fileName = time().'-'.Auth::user()->id.'-about-'.$request->file('gambar')->hashName();
+            $request->file('gambar')->move(public_path('frontend/assets/img'), $fileName);
+            
+            if($asset) {
+                if(file_exists(public_path('frontend/assets/img/'.$asset->thumbnail))) {
+                    unlink(public_path('frontend/assets/img/'.$asset->thumbnail));
+                }
+
+                $asset_model = Asset::find($asset->id);
+                $asset_model->thumbnail = $fileName;
+                $asset_model->content_id = $model->id;
+                $asset_model->save();
+            } else {
+                $asset_model = new Asset();
+                $asset_model->thumbnail = $fileName;
+                $asset_model->content_id = $model->id;
+                $asset_model->keterangan = "thumbnail";
+                $asset_model->save();
+            }
+        }
 
         $model->title = $request->title;
         $model->subtitle = $request->subtitle;
         $model->slug = $this->textToSlug($request->title);
         $model->short_description = $request->short_description;
         $model->content = $content;
-        $model->section_id = $section->id;
-        $model->active = $request->active;
-        $model->save();
-
-        if($request->file('gambar')) {
-            foreach($request->file('gambar') as $key => $file) {
-                $asset = Asset::where('content_id',$model->id)->where('keterangan',$request->keterangan[$key])->first();
-                
-                if(file_exists(public_path('front/assets/img/'.$asset->thumbnail))) {
-                    unlink(public_path('front/assets/img/'.$asset->thumbnail));
-                }
-
-                $time = time();
-                $fileName =  $time.'-'.Auth::user()->id.'-testimoni-'.$file->hashName();
-                $file->move(public_path('front/assets/img'), $fileName);
-
-                $asset_model = Asset::find($asset->id);
-                $asset_model->thumbnail = $fileName;
-                $asset_model->keterangan = $request->keterangan[$key];
-                $asset_model->save();
-            }
-        }
+        $model->section_id = 5;
 
         if ($model->save()) {
             return redirect()->route('administrator.about.index')->with('alert.success', 'About telah Diperbaharui');

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
-use App\Models\Identitas;
+use App\Models\Content;
+use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -23,7 +24,16 @@ class IdentitasController extends Controller
      */
     public function index()
     {
-        return view('back.identitas.index');
+        $section = Section::where('slug', '=',request()->segment(2))->first();
+
+        $identitas = Content::where('section_id','=',$section->id)->whereNull('deleted_at')->first();
+        if($identitas) {
+            $data['model'] = Content::find($identitas->id);
+            $data['content'] = json_decode($data['model']->content);
+        } else {
+            $data['model'] = new Content();
+        }
+        return view('back.identitas.form', $data);
     }
 
     /**
@@ -33,7 +43,7 @@ class IdentitasController extends Controller
      */
     public function create()
     {
-        $model = new Identitas();
+        $model = new Content();
         return view('back.identitas.form', ['model' => $model]);
     }
 
@@ -47,57 +57,52 @@ class IdentitasController extends Controller
     {
         $request->validate([
             'nama_website' => 'required',
-            'alamat_kantor' => 'required',
             'no_telp' => 'required',
             'no_wa' => 'required',
+            'logo' => 'required',
             'email' => 'required',
-            'active' => 'required',
         ],
         [
             'nama_website.required' => 'Nama Website Wajib Diisi',
-            'alamat_kantor.required' => 'Alamat Kantor Wajib Diisi',
             'no_telp.required' => 'No. Telp Wajib Diisi',
             'no_wa.required' => 'No. WA Wajib Diisi',
+            'logo.required' => 'Logo Institusi Wajib Diisi',
             'email.required' => 'Email Wajib Diisi',
-            'active.required' => 'Keterangan Wajib Diisi',
         ]);
 
-        $model = new Identitas();
+        $section = Section::where('slug', '=',request()->segment(2))->first();
 
-        $model->nama_website = $request->nama_website;
-        $model->nama_gedung = $request->nama_gedung;
-        $model->alamat_kantor = $request->alamat_kantor;
-        $model->no_telp = $request->no_telp;
-        $model->no_wa = $request->no_wa;
-        $model->email = $request->email;
-        $model->facebook = $request->facebook;
-        $model->instagram = $request->instagram;
-        $model->linkedin = $request->linkedin;
-        $model->active = $request->active;
-
-        if($request->hasFile('img_address_1')) {
+        if($request->hasFile('logo')) {
             $time = time();
-            $fileName = $time.'-'.$request->img_address_1->hashName().'-address.'.$request->img_address_1->extension();
+            $fileName = $time.'-'.$request->logo->hashName().'-logo.'.$request->logo->extension();
 
-            $request->img_address_1->move(public_path('front/assets/img'), $fileName);
-            $model->img_address_1 = $fileName;
+            $request->logo->move(public_path('frontend/assets/img'), $fileName);
+            $logo = $fileName;
         }
 
-        if($request->hasFile('img_address_2')) {
-            $time = time();
-            $fileName = $time.'-'.$request->img_address_2->hashName().'-address.'.$request->img_address_2->extension();
+        $content['nama_website'] = isset($request->nama_website) ? $request->nama_website : '';
+        $content['slogan'] = isset($request->slogan) ? $request->slogan : '';
+        $content['email'] = isset($request->email) ? $request->email : '';
+        $content['no_telp'] = isset($request->no_telp) ? $request->no_telp : '';
+        $content['no_wa'] = isset($request->no_wa) ? $request->no_wa : '';
+        $content['alamat_kantor'] = isset($request->alamat_kantor) ? $request->alamat_kantor : '';
+        $content['logo'] = $logo;
+        $content['meta_title'] = isset($request->meta_title) ? $request->meta_title : '';
+        $content['meta_description'] = isset($request->meta_description) ? $request->meta_description : '';
+        $content['facebook'] = isset($request->facebook) ? $request->facebook : '';
+        $content['twitter'] = isset($request->twitter) ? $request->twitter : '';
+        $content['youtube'] = isset($request->youtube) ? $request->youtube : '';
+        $content['instagram'] = isset($request->instagram) ? $request->instagram : '';
+        $content['linkedin'] = isset($request->linkedin) ? $request->linkedin : '';
 
-            $request->img_address_2->move(public_path('front/assets/img'), $fileName);
-            $model->img_address_2 = $fileName;
-        }
+        $model = new Content();
 
-        if($request->hasFile('img_address_3')) {
-            $time = time();
-            $fileName = $time.'-'.$request->img_address_3->hashName().'-address.'.$request->img_address_3->extension();
-
-            $request->img_address_3->move(public_path('front/assets/img'), $fileName);
-            $model->img_address_3 = $fileName;
-        }
+        $model->title = 'Identitas Website';
+        $model->slug = $this->textToSlug($model->title.' '.$request->nama_website);
+        $model->short_description = $request->short_description;
+        $model->content = json_encode($content);
+        $model->section_id = $section->id;
+        $model->active = 1;
 
         if ($model->save()) {
             return redirect()->route('administrator.identitas.index')->with('alert.success', 'Identitas Baru Berhasil Tersimpan ');
@@ -115,7 +120,7 @@ class IdentitasController extends Controller
      */
     public function show($id)
     {
-        $model = Identitas::find($id);
+        $model = Content::find($id);
         return res::json($model);
     }
 
@@ -128,7 +133,7 @@ class IdentitasController extends Controller
     public function edit($id)
     {
         $id = base64_decode($id);
-        $model = Identitas::find($id);
+        $model = Content::find($id);
         return view('back.identitas.form', ['model' => $model]);
     }
 
@@ -143,70 +148,59 @@ class IdentitasController extends Controller
     {
         $request->validate([
             'nama_website' => 'required',
-            'alamat_kantor' => 'required',
             'no_telp' => 'required',
             'no_wa' => 'required',
             'email' => 'required',
-            'active' => 'required',
         ],
         [
             'nama_website.required' => 'Nama Website Wajib Diisi',
-            'alamat_kantor.required' => 'Alamat Kantor Wajib Diisi',
             'no_telp.required' => 'No. Telp Wajib Diisi',
             'no_wa.required' => 'No. WA Wajib Diisi',
             'email.required' => 'Email Wajib Diisi',
-            'active.required' => 'Keterangan Wajib Diisi',
         ]);
 
+        $section = Section::where('slug', '=',request()->segment(2))->first();
+
         $id = base64_decode($id);
-        $model = Identitas::find($id);
+        $model = Content::find($id);
 
-        $model->nama_website = $request->nama_website;
-        $model->nama_gedung = $request->nama_gedung;
-        $model->alamat_kantor = $request->alamat_kantor;
-        $model->no_telp = $request->no_telp;
-        $model->no_wa = $request->no_wa;
-        $model->email = $request->email;
-        $model->facebook = $request->facebook;
-        $model->instagram = $request->instagram;
-        $model->linkedin = $request->linkedin;
-        $model->active = $request->active;
+        $content_old = json_decode($model->content);
 
-        if($request->hasFile('img_address_1')) {
-            if(file_exists(public_path('front/assets/img/'.$model->img_address_1))) {
-                unlink(public_path('front/assets/img/'.$model->img_address_1));
+        if($request->hasFile('logo')) {
+            if(file_exists(public_path('frontend/assets/img/'.$content_old->logo))) {
+                unlink(public_path('frontend/assets/img/'.$content_old->logo));
             }
 
             $time = time();
-            $fileName = $time.'-'.Auth::user()->id.'-address.'.$request->img_address_1->extension();
+            $fileName = $time.'-'.$request->logo->hashName().'-logo.'.$request->logo->extension();
 
-            $request->img_address_1->move(public_path('front/assets/img'), $fileName);
-            $model->img_address_1 = $fileName;
+            $request->logo->move(public_path('frontend/assets/img'), $fileName);
+            $logo = $fileName;
+        } else {
+            $logo = $content_old->logo;
         }
 
-        if($request->hasFile('img_address_2')) {
-            if(file_exists(public_path('front/assets/img/'.$model->img_address_2))) {
-                unlink(public_path('front/assets/img/'.$model->img_address_2));
-            }
+        $content['nama_website'] = isset($request->nama_website) ? $request->nama_website : '';
+        $content['slogan'] = isset($request->slogan) ? $request->slogan : '';
+        $content['email'] = isset($request->email) ? $request->email : '';
+        $content['no_telp'] = isset($request->no_telp) ? $request->no_telp : '';
+        $content['no_wa'] = isset($request->no_wa) ? $request->no_wa : '';
+        $content['alamat_kantor'] = isset($request->alamat_kantor) ? $request->alamat_kantor : '';
+        $content['logo'] = $logo;
+        $content['meta_title'] = isset($request->meta_title) ? $request->meta_title : '';
+        $content['meta_description'] = isset($request->meta_description) ? $request->meta_description : '';
+        $content['facebook'] = isset($request->facebook) ? $request->facebook : '';
+        $content['twitter'] = isset($request->twitter) ? $request->twitter : '';
+        $content['youtube'] = isset($request->youtube) ? $request->youtube : '';
+        $content['instagram'] = isset($request->instagram) ? $request->instagram : '';
+        $content['linkedin'] = isset($request->linkedin) ? $request->linkedin : '';
 
-            $time = time();
-            $fileName = $time.'-'.Auth::user()->id.'-address.'.$request->img_address_2->extension();
-
-            $request->img_address_2->move(public_path('front/assets/img'), $fileName);
-            $model->img_address_2 = $fileName;
-        }
-
-        if($request->hasFile('img_address_3')) {
-            if(file_exists(public_path('front/assets/img/'.$model->img_address_3))) {
-                unlink(public_path('front/assets/img/'.$model->img_address_3));
-            }
-
-            $time = time();
-            $fileName = $time.'-'.Auth::user()->id.'-address.'.$request->img_address_3->extension();
-
-            $request->img_address_3->move(public_path('front/assets/img'), $fileName);
-            $model->img_address_3 = $fileName;
-        }
+        $model->title = 'Identitas Website';
+        $model->slug = $this->textToSlug($model->title.' '.$request->nama_website);
+        $model->short_description = $request->short_description;
+        $model->content = json_encode($content);
+        $model->section_id = $section->id;
+        $model->active = 1;
 
         if ($model->save()) {
             return redirect()->route('administrator.identitas.index')->with('alert.success', 'Identitas Berhasil Diperbaharui');
@@ -224,7 +218,7 @@ class IdentitasController extends Controller
     public function destroy($id)
     {
         $id = base64_decode($id);
-        $model = Identitas::find($id);
+        $model = Content::find($id);
         $model->deleted_at = date('Y-m-d H:i:s');
         $model->deleted_by = Auth::user()->id;
         $model->save();
@@ -232,7 +226,7 @@ class IdentitasController extends Controller
 
     public function datatable(Request $request)
     {
-        $query = Identitas::all();
+        $query = Content::all();
         return DataTables::of($query)
             ->addColumn('action', function ($model) {
                 $string = '<div class="btn-group">';
@@ -245,4 +239,14 @@ class IdentitasController extends Controller
             ->rawColumns(['action'])
             ->make(true);
     }
+
+    private function textToSlug($text='') {
+        $text = trim($text);
+        if (empty($text)) return '';
+          $text = preg_replace("/[^a-zA-Z0-9\-\s]+/", "", $text);
+          $text = strtolower(trim($text));
+          $text = str_replace(' ', '-', $text);
+          $text = $text_ori = preg_replace('/\-{2,}/', '-', $text);
+          return $text;
+    }   
 }

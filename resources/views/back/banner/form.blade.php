@@ -45,31 +45,12 @@
                         @if ($model->exists)
                             <input type="hidden" name="_method" value="PUT">
                         @endif
-                        <div class="form-group">
-                            <label for="thumbnail" class="col-sm-12 col-form-label">Banner <span
-                                    class="text-red">*</span></label>
-                            <div class="col-sm-12">
-                                <input type="file" name="thumbnail[]" id="thumbnail" class="form-control" multiple>
-                                @error('thumbnail')
-                                    <small class="text-red">
-                                        <strong>{{ $message }}</strong>
-                                    </small>
-                                @enderror
-                            </div>
-
-                            @php
-                                if ($model->exists) {
-                                    echo 'Thumbnail saat ini: <br>';
-                                    echo '<img class="img-fluid" src="' . asset('front/assets/img/' . $model->thumbnail) . '">';
-                                }
-                            @endphp
-                        </div>
 
                         <div class="form-group">
-                            <label for="title" class="col-sm-12 col-form-label">Title</label>
+                            <label for="title" class="col-sm-12 col-form-label">Judul</label>
                             <div class="col-sm-12">
                                 <input type="text" name="title" id="title"
-                                    class="form-control @error('title') is-invalid @enderror" placeholder="Title Banner"
+                                    class="form-control @error('title') is-invalid @enderror" placeholder="Judul Banner"
                                     value="{{ $model->exists ? $model->title : old('title') }}">
                                 @error('title')
                                     <small class="invalid-feedback">
@@ -80,10 +61,10 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="title" class="col-sm-12 col-form-label">Subtitle</label>
+                            <label for="title" class="col-sm-12 col-form-label">Sub Judul</label>
                             <div class="col-sm-12">
                                 <input type="text" name="subtitle" id="subtitle" class="form-control"
-                                    placeholder="Sub Title Banner"
+                                    placeholder="Sub Judul Banner"
                                     value="{{ $model->exists ? $model->subtitle : old('subtitle') }}">
                                 @error('subtitle')
                                     <small class="invalid-feedback">
@@ -94,7 +75,20 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="content" class="col-sm-12 col-form-label">Deskripsi</label>
+                            <label for="short_description" class="col-sm-12 col-form-label">Deskripsi Singkat</label>
+                            <div class="col-sm-12">
+                                <textarea name="short_description" rows="5" class="form-control @error('short_description') is-invalid @enderror"
+                                    placeholder="Deskripsi Singkat">{{ $model->exists ? $model->short_description : old('short_description') }}</textarea>
+                                @error('short_description')
+                                    <small class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="content" class="col-sm-12 col-form-label">Konten</label>
                             <div class="col-sm-12">
                                 <textarea name="content" class="summernote" rows="5">{{ $model->exists ? $model->content : old('content') }}</textarea>
                                 @error('content')
@@ -103,6 +97,30 @@
                                     </small>
                                 @enderror
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="thumbnail" class="col-sm-12 col-form-label">Gambar <span
+                                    class="text-red">*</span></label>
+                            <div class="col-sm-12">
+                                <input type="file" name="thumbnail" id="thumbnail" class="form-control">
+                                @error('thumbnail')
+                                    <small class="text-red">
+                                        <strong>{{ $message }}</strong>
+                                    </small>
+                                @enderror
+                            </div>
+
+                            @php
+                                if ($model->exists) {
+                                    $asset = \App\Models\Asset::where('content_id', $model->id)->first();
+
+                                    echo 'Thumbnail saat ini: <br>';
+                                    echo '<img class="img-fluid" src="' .
+                                        asset('frontend/assets/img/' . $asset->thumbnail) .
+                                        '">';
+                                }
+                            @endphp
                         </div>
 
                         <div class="form-group">

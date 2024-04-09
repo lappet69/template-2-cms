@@ -19,7 +19,17 @@
 </head>
 
 <body class="hold-transition bg-login">
-    <img src="{{ asset('front/assets/img/academy-logo.png') }}" alt="Logo" class="login-box-msg">
+    @php
+        $identitas = \App\Models\Content::where('active', 1)->where('section_id', 1)->limit(1)->first();
+        $content = json_decode($identitas->content);
+    @endphp
+    @if ($identitas->exists)
+        <img src="{{ asset('frontend/assets/img/' . $content->logo) }}" alt="Logo" class="img-fluid login-box-msg">
+    @else
+        <img src="{{ asset('frontend/assets/img/law-firm.png') }}" alt="Logo" class="img-fluid login-box-msg">
+    @endif
+
+
     <div class="login-box">
 
         <form method="POST" action="{{ route('actionlogin') }}">
