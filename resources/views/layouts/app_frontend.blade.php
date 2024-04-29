@@ -16,14 +16,28 @@
     <meta content="" name="keywords" />
     <meta content="" name="description" />
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon" />
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@600;700&display=swap"
-        rel="stylesheet" />
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
@@ -33,114 +47,105 @@
     <link href="{{ asset('assets/lib/animate/animate.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet" />
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
-
-    <!-- Template Stylesheet -->
-    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" />
 </head>
 
 <body>
-    <!-- Spinner Start -->
-    <div id="spinner"
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-grow text-primary" role="status"></div>
-    </div>
-    <!-- Spinner End -->
 
     @include('layouts.navbar_frontend')
 
     @yield('content')
 
-    <!-- Footer Start -->
-    <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container py-5">
-            <div class="row g-5">
-                <div class="col-lg-3 col-md-6">
-                    <h3 class="text-white mb-4">
-                        {{ $content->nama_website }}
-                    </h3>
-                    <p>
-                        {{ $content->meta_description }}
-                    </p>
-                    <div class="d-flex pt-2">
-                        <a class="btn btn-square me-1" href="{{ $content->twitter }}"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-square me-1" href="{{ $content->facebook }}"><i
-                                class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-square me-1" href="{{ $content->youtube }}"><i
-                                class="fab fa-youtube"></i></a>
-                        <a class="btn btn-square me-0" href="{{ $content->instagram }}"><i
-                                class="fab fa-instagram"></i></a>
-                        <a class="btn btn-square me-0" href="{{ $content->linkedin }}"><i
-                                class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="text-light mb-4">Info Kontak</h5>
-                    <p>
-                        <a href=""class="text-light"> <i
-                                class="fa fa-map-marker-alt me-3"></i>{{ $content->alamat_kantor }}</a>
-                    </p>
-                    <p><a href="https://wa.me/{{ $content->no_wa }}"class="text-light"><i
-                                class="fa fa-phone-alt me-3"></i>{{ $content->no_wa }}</a></p>
-                    <p><a href="mailto:{{ $content->email }}"class="text-light"><i
-                                class="fa fa-envelope me-3"></i>{{ $content->email }}</a></p>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="text-light mb-4">Peta Situs</h5>
-                    <a class="btn btn-link" href="{{ route('index') }}">Home</a>
-                    <a class="btn btn-link" href="{{ route('index') }}">Tentang Kami</a>
-                    <a class="btn btn-link" href="{{ route('area-praktek') }}">Area Praktek</a>
-                    <a class="btn btn-link" href="{{ route('tim-kami') }}">Tim Kami</a>
-                    <a class="btn btn-link" href="{{ route('artikel-publikasi') }}">Artikel & Publikasi</a>
-                    <a class="btn btn-link" href="{{ route('index') }}">Kontak Kami</a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="text-light mb-4">Newsletter</h5>
-                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-                    <div class="position-relative mx-auto" style="max-width: 400px">
-                        <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text"
-                            placeholder="Your email" />
-                        <button type="button" class="btn btn-secondary py-2 position-absolute top-0 end-0 mt-2 me-2">
-                            SignUp
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container-fluid copyright">
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+
+        <div class="footer-content position-relative">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        <span class="text-white"><a href="{{ route('index') }}"><i
-                                    class="fas fa-copyright text-light me-2"></i>{{ date('Y') . ' ' . $content->nama_website }}</a>,
-                            All right reserved.</span>
-                    </div>
-                    <div class="col-md-6 text-center text-md-end">
-                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                        Designed By <a class="border-bottom" target="_blank" href="https://romajunateknologi.com">CV.
-                            Romajuna
-                            Teknologi Firdaus</a>
-                    </div>
+                <div class="row justify-content-between">
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-info">
+                            <h3> {{ $content->nama_website }}</h3>
+                            <p>
+                                {{ $content->meta_description }}
+                            </p>
+                            <div class="social-links d-flex mt-3">
+                                <a class="btn btn-square me-1" href="{{ $content->twitter }}"><i
+                                        class="fab fa-twitter"></i></a>
+                                <a class="btn btn-square me-1" href="{{ $content->facebook }}"><i
+                                        class="fab fa-facebook-f"></i></a>
+                                <a class="btn btn-square me-1" href="{{ $content->youtube }}"><i
+                                        class="fab fa-youtube"></i></a>
+                                <a class="btn btn-square me-0" href="{{ $content->instagram }}"><i
+                                        class="fab fa-instagram"></i></a>
+                                <a class="btn btn-square me-0" href="{{ $content->linkedin }}"><i
+                                        class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div><!-- End footer info column-->
+
+                    <div class="col-lg-3 col-md-3 footer-links">
+                        <h4>Peta Situs</h4>
+                        <ul>
+                            <li><a href="{{ route('index') }}">Home</a></li>
+                            <li><a href="{{ route('index') }}">Tentang Kami</a></li>
+                            <li><a href="{{ route('area-praktek') }}">Area Praktek</a></li>
+                            <li><a href="{{ route('tim-kami') }}">Tim Kami</a></li>
+                            <li><a href="{{ route('artikel-publikasi') }}">Artikel & Publikasi</a>
+                            </li>
+                            <li><a href="{{ route('index') }}">Kontak Kami</a></li>
+                        </ul>
+                    </div><!-- End footer links column-->
+
+
+                    <div class="col-lg-3 col-md-3 footer-links">
+                        <h4>Info Kontak</h4>
+                        <ul>
+                            <li><a href=""class="text-light"> <i
+                                        class="fa fa-map-marker-alt me-3"></i>{{ $content->alamat_kantor }}</a></li>
+                            <li><a href="https://wa.me/{{ $content->no_wa }}"class="text-light"><i
+                                        class="fa fa-phone-alt me-3"></i>{{ $content->no_wa }}</a></li>
+                            <li><a href="mailto:{{ $content->email }}"class="text-light"><i
+                                        class="fa fa-envelope me-3"></i>{{ $content->email }}</a></li>
+                        </ul>
+                    </div><!-- End footer links column-->
+
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Footer End -->
 
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+        <div class="footer-legal text-center position-relative">
+            <div class="container">
+                <div class="copyright">
+                    <span class="text-white"><a href="{{ route('index') }}"><i
+                                class="fas fa-copyright text-light me-2"></i>{{ date('Y') . ' ' . $content->nama_website }}</a>,
+                        All right reserved.</span>
+                </div>
+                <div class="credits">
+                    Designed By <a class="border-bottom" target="_blank" href="https://romajunateknologi.com">CV.
+                        Romajuna
+                        Teknologi Firdaus</a>
+                </div>
+            </div>
+        </div>
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('assets/lib/wow/wow.min.js') }}"></script>
-    <script src="{{ asset('assets/lib/easing/easing.min.js') }}"></script>
-    <script src="{{ asset('assets/lib/waypoints/waypoints.min.js') }}"></script>
-    <script src="{{ asset('assets/lib/owlcarousel/owl.carousel.min.js') }}"></script>
-    <script src="{{ asset('assets/lib/counterup/counterup.min.js') }}"></script>
+    </footer>
+    <!-- End Footer -->
 
-    <!-- Template Javascript -->
+    <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <div id="preloader"></div>
+
+    <!-- Vendor JS Files -->
+    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/aos/aos.js') }}"></script>
+    <script src="{{ asset('assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+    <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
+
+    <!-- Template Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
 </body>
 

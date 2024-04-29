@@ -17,6 +17,10 @@
                 url('{{ asset('frontend/assets/img/' . $call_to_action->thumbnail) }}'), no-repeat center center;
             background-size: cover;
         }
+
+        .nav-item {
+            color: black !important;
+        }
     </style>
 @endpush
 @section('content')
@@ -28,11 +32,11 @@
     <!-- Header Start -->
     <div class="container-fluid bg-breadcrumb">
         <div class="container text-center py-5" style="max-width: 900px;">
-            <h3 class="text-white display-3 mb-4 wow fadeInDown" data-wow-delay="0.1s">About Us</h1>
+            <h3 class="text-black display-6 h5 mt-5 wow fadeInDown" data-wow-delay="0.1s">About Us</h1>
                 <ol class="breadcrumb justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('index') }}">Home</a></li>
                     <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                    <li class="breadcrumb-item active text-primary">About</li>
+                    <li class="breadcrumb-item active text-warning">About</li>
                 </ol>
         </div>
     </div>
@@ -43,8 +47,8 @@
         <div class="container py-5">
             <div class="row g-5 align-items-center">
                 <div class="col-lg-5 wow fadeInLeft" data-wow-delay="0.2s">
-                    <div class="about-img pb-5 ps-5">
-                        <img src="{{ asset('frontend/assets/img/about.jpg') }}" class="img-fluid rounded w-100"
+                    <div class=" pb-5 ps-5">
+                        <img src="{{ asset('frontend/assets/img/about.jpg') }}" class="img-fluid rounded w-100 h-100"
                             style="object-fit: cover" alt="Image" />
                     </div>
                 </div>
@@ -59,7 +63,7 @@
                         </p>
 
                         <a href="https://wa.me/{{ $content->no_wa }}" target="_blank"
-                            class="btn btn-primary rounded-pill text-white py-3 px-5">Hubungi Kami</a>
+                            class="btn btn-warning rounded-pill text-white py-3 px-5">Hubungi Kami</a>
                     </div>
                 </div>
             </div>
@@ -98,21 +102,21 @@
                                         '">'
                                     : '<img class="img-fluid rounded-top w-100" alt="" src="' . asset('frontend/assets/img/lawyer-icon.jpeg') . '">' !!}
                                 <div class="team-icon d-flex justify-content-center">
-                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1"
+                                    <a class="btn btn-square btn-warning text-white rounded-circle mx-1"
                                         href="{{ $short_description['media_sosial']['facebook'] }}"><i
                                             class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1"
+                                    <a class="btn btn-square btn-warning text-white rounded-circle mx-1"
                                         href="{{ $short_description['media_sosial']['twitter'] }}"><i
                                             class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1"
+                                    <a class="btn btn-square btn-warning text-white rounded-circle mx-1"
                                         href="{{ $short_description['media_sosial']['instagram'] }}"><i
                                             class="fab fa-instagram"></i></a>
-                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1"
+                                    <a class="btn btn-square btn-warning text-white rounded-circle mx-1"
                                         href="{{ $short_description['media_sosial']['linkedin'] }}"><i
                                             class="fab fa-linkedin-in"></i></a>
                                 </div>
                             </div>
-                            <div class="team-content text-center border border-primary border-top-0 rounded-bottom p-4">
+                            <div class="team-content text-center border border-warning border-top-0 rounded-bottom p-4">
                                 <h5>{{ $law->title }}</h5>
                                 <p class="mb-0">{{ $law->jabatan->name }}</p>
                             </div>
@@ -124,7 +128,7 @@
                 @endforeach
 
                 <div class="col-12 text-center wow fadeInUp" data-wow-delay="{{ $count + 0.2 }}s">
-                    <a class="btn btn-primary rounded-pill text-white py-3 px-5" href="{{ route('tim-kami') }}">Lihat
+                    <a class="btn btn-warning rounded-pill text-white py-3 px-5" href="{{ route('tim-kami') }}">Lihat
                         Seluruh Tim Kami</a>
                 </div>
             </div>
@@ -189,7 +193,7 @@
                                 <div class="d-flex flex-column h-100">
                                     <div class="text-start mb-4">
                                         <a href="https://wa.me/{{ $content->no_wa }}" target="_blank"
-                                            class="btn btn-primary rounded-pill text-white py-3 px-5">Hubungi Kami</a>
+                                            class="btn btn-warning rounded-pill text-white py-3 px-5">Hubungi Kami</a>
                                     </div>
                                 </div>
                             </div>
@@ -205,7 +209,7 @@
                                 <div class="row gy-3 gx-4">
                                     <div class="col-xl-12">
                                         <input type="text" name="nama_pengunjung"
-                                            class="form-control @error('nama_pengunjung') is-invalid @enderror py-3 border-primary bg-transparent text-white"
+                                            class="form-control @error('nama_pengunjung') is-invalid @enderror py-3 border-warning bg-transparent text-white"
                                             placeholder="Nama Anda" />
                                         @error('nama_pengunjung')
                                             <small class="invalid-feedback">
@@ -215,7 +219,7 @@
                                     </div>
                                     <div class="col-xl-12">
                                         <input type="email" name="email"
-                                            class="form-control @error('email') is-invalid @enderror py-3 border-primary bg-transparent text-white"
+                                            class="form-control @error('email') is-invalid @enderror py-3 border-warning bg-transparent text-white"
                                             placeholder="Email" />
 
                                         @error('email')
@@ -226,7 +230,7 @@
                                     </div>
                                     <div class="col-xl-12">
                                         <input type="phone" name="no_wa"
-                                            class="form-control @error('no_wa') is-invalid @enderror py-3 border-primary bg-transparent"
+                                            class="form-control @error('no_wa') is-invalid @enderror py-3 border-warning bg-transparent"
                                             placeholder="No. WhatsApp / No. HP yang bisa Dihubungi" />
                                         @error('no_wa')
                                             <small class="invalid-feedback">
@@ -238,7 +242,7 @@
                                         <div class="form-group">
                                             <div class="date" id="date" data-target-input="nearest">
                                                 <input type="text" name="tanggal_janji_temu"
-                                                    class="form-control @error('tanggal_janji_temu') is-invalid @enderror py-3 border-primary bg-transparent datetimepicker-input"
+                                                    class="form-control @error('tanggal_janji_temu') is-invalid @enderror py-3 border-warning bg-transparent datetimepicker-input"
                                                     placeholder="Pilih Tanggal" data-target="#date"
                                                     data-toggle="datetimepicker" />
                                             </div>
@@ -253,7 +257,7 @@
                                         <div class="form-group">
                                             <div class="time" id="time" data-target-input="nearest">
                                                 <input type="text" name="waktu_janji_temu"
-                                                    class="form-control @error('waktu_janji_temu') is-invalid @enderror py-3 border-primary bg-transparent datetimepicker-input"
+                                                    class="form-control @error('waktu_janji_temu') is-invalid @enderror py-3 border-warning bg-transparent datetimepicker-input"
                                                     placeholder="Pilih Waktu" data-target="#time"
                                                     data-toggle="datetimepicker" />
                                             </div>
@@ -265,7 +269,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <textarea class="form-control @error('topik_janji_temu') is-invalid @enderror border-primary bg-transparent text-white"
+                                        <textarea class="form-control @error('topik_janji_temu') is-invalid @enderror border-warning bg-transparent text-white"
                                             name="topik_janji_temu" id="" cols="30" rows="5"
                                             placeholder="Saya ingin berkonsultasi tentang . . ."></textarea>
 
@@ -276,7 +280,7 @@
                                         @enderror
                                     </div>
                                     <div class="col-12">
-                                        <button type="submit" class="btn btn-primary text-white w-100 py-3 px-5">
+                                        <button type="submit" class="btn btn-warning text-white w-100 py-3 px-5">
                                             Atur Janji Temu
                                         </button>
                                     </div>
